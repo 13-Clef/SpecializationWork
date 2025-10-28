@@ -2,28 +2,24 @@ using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
 {
-    public float radius = 2f;        // Radius of the circle
-    public float speed = 2f;         // Speed of rotation
-
-    private Vector3 centerPosition;  // Center point of the circle
-    private float angle = 0f;        // Current angle
+    public float movementSpeed = 2f;         // Speed of rotation
+    public Vector3 moveDirection = Vector3.back;  // Moves in -Z direction
 
     void Start()
     {
-        // Store the starting position as the center of the circle
-        centerPosition = transform.position;
+        // Make sure the direction is normalized
+        moveDirection = moveDirection.normalized;
     }
 
     void Update()
     {
-        // Increment the angle based on speed and time
-        angle += speed * Time.deltaTime;
+        // Move in a straight line in the specified direction
+        transform.position += moveDirection * movementSpeed * Time.deltaTime;
 
-        // Calculate new position using circular motion
-        float x = centerPosition.x + Mathf.Cos(angle) * radius;
-        float z = centerPosition.z + Mathf.Sin(angle) * radius;
-
-        // Update the enemy's position
-        transform.position = new Vector3(x, centerPosition.y, z);
+        // Optional: Make enemy face the direction it's moving
+        if (moveDirection != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(moveDirection);
+        }
     }
 }
