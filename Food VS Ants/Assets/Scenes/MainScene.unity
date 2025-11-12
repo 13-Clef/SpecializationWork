@@ -1948,11 +1948,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _crossHairImage: {fileID: 804391377}
-  _normalColor: {r: 1, g: 1, b: 1, a: 1}
-  _validPlacementColor: {r: 0, g: 1, b: 0, a: 1}
-  _raycastDistance: 100
+  _raycastDistance: 7.5
   _hoverIndicatorPrefab: {fileID: 2247043667140489524, guid: 394a69abfb384e14b8da4c1a5a87b685, type: 3}
   _indicatorYOffset: 2
+  _foodGuardianPrefab: {fileID: 5087684797463486111, guid: bd9160a31e1b86c419f60d08add094cc, type: 3}
+  _towerYOffset: 2
 --- !u!1 &676553870
 GameObject:
   m_ObjectHideFlags: 0
@@ -6310,9 +6310,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerInput: {fileID: 2118828925}
-  _moveSpeed: 5
+  _moveSpeed: 10
   _cameraTarget: {fileID: 221392802}
-  _lookSensitivity: 1
+  _lookSensitivity: 0.5
   _maxLookAngle: 80
 --- !u!114 &2118828925
 MonoBehaviour:

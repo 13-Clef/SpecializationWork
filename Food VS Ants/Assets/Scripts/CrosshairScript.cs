@@ -3,31 +3,34 @@ using UnityEngine.UI;
 
 public class CrosshairScript : MonoBehaviour
 {
+    [Header("Crosshair Settings")]
     [SerializeField] private RawImage _crossHairImage;
-    [SerializeField] private Color _normalColor = Color.white;
-    [SerializeField] private Color _validPlacementColor = Color.green;
+
+    [Header("Placement/Retrieve Settings")]
     [SerializeField] private float _raycastDistance = 100f;
     [SerializeField] private GameObject _hoverIndicatorPrefab;
     [SerializeField] private float _indicatorYOffset = 2f;
+
+    [Header("Food Guardians Settings")]
+    [SerializeField] private GameObject _foodGuardianPrefab;
+    [SerializeField] private float _towerYOffset = 2f;
     //[SerializeField] private LayerMask _placeableLayer;
 
     private Camera _mainCamera;
     private GameObject _currentHoverIndicator;
+    private GameObject _currentTargetTile; // track which tile currently hovering
 
     // Start is called before the first frame update
     void Start()
     {
         _mainCamera = Camera.main;
-        if (_crossHairImage != null)
-        {
-            _crossHairImage.color = _normalColor;
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
         CheckPlacement();
+        HandlePlacement();
     }
 
     void CheckPlacement()
@@ -44,23 +47,46 @@ public class CrosshairScript : MonoBehaviour
             // check if hit object is a valid placement tile
             if (hit.collider.CompareTag("PlaceableTile"))
             {
-                _crossHairImage.color = _validPlacementColor;
+                _currentTargetTile = hit.collider.gameObject;
                 ShowHoverIndicator(hit.collider.gameObject);
             }
             else
             {
-                _crossHairImage.color = _normalColor;
+                _currentTargetTile = null;
                 HideHoverIndicator();
             }
         }
 
         else
         {
-            _crossHairImage.color = _normalColor;
+            _currentTargetTile = null;
             HideHoverIndicator();
         }
     }
 
+    void HandlePlacement()
+    {
+        // check for left mouse click, if the tile is available then place food guardian
+        if (Input.GetMouseButtonDown(0))
+        {
+            PlaceFoodGuardian(_currentTargetTile);
+        }
+    }
+
+    void PlaceFoodGuardian(GameObject tile)
+    {
+        // calculate the position for the food guardian to appear on the tile
+        Vector3 spawnPosition = tile.transform.position;
+        spawnPosition.y += _towerYOffset;
+
+        // spawn the food guardian
+        GameObject foodGuardian = Instantiate(_foodGuardianPrefab, spawnPosition, Quaternion.identity);
+
+        //// Optional: Mark tile as occupied so you can't place another tower
+        //tile.tag = "Occupied"; // Change tag so it's no longer placeable
+
+        //Debug.Log("Food Guardian placed on: " + tile.name);
+    }
     void ShowHoverIndicator(GameObject tile)
     {
         // create the indicator if it does not exist

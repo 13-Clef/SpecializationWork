@@ -327,7 +327,7 @@ GameObject:
   - component: {fileID: 6385874544374312279}
   - component: {fileID: 209304525834210811}
   m_Layer: 0
-  m_Name: Tower
+  m_Name: FoodGuardian1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -378,7 +378,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 029e40a5405aa744496de54abcabf4c4, type: 2}
+  - {fileID: 2100000, guid: 43b7acb0bde77b74e9bc62c9ab9e234b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
