@@ -1951,6 +1951,7 @@ MonoBehaviour:
   _raycastDistance: 7.5
   _hoverIndicatorPrefab: {fileID: 2247043667140489524, guid: 394a69abfb384e14b8da4c1a5a87b685, type: 3}
   _indicatorYOffset: 2
+  _retrieveIndicatorPrefab: {fileID: 4119705460196203722, guid: 6439b2d1742914a4c877b5aabf075e03, type: 3}
   _foodGuardianPrefab: {fileID: 5087684797463486111, guid: bd9160a31e1b86c419f60d08add094cc, type: 3}
   _towerYOffset: 2
 --- !u!1 &676553870
@@ -6442,6 +6443,10 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 1601194353}
+    - target: {fileID: 6385874544374312279, guid: bd9160a31e1b86c419f60d08add094cc, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6700650529239948674, guid: bd9160a31e1b86c419f60d08add094cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 9.01
