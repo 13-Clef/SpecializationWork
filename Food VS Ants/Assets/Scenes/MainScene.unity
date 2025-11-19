@@ -6372,7 +6372,7 @@ MonoBehaviour:
   _playerInput: {fileID: 2118828925}
   _moveSpeed: 10
   _cameraTarget: {fileID: 221392802}
-  _lookSensitivity: 0.5
+  _lookSensitivity: 0.1
   _maxLookAngle: 80
 --- !u!114 &2118828925
 MonoBehaviour:

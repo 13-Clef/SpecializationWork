@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class TowerScript : MonoBehaviour
+public class FoodGuardianScript : MonoBehaviour
 {
-    public Transform enemy;              // Reference to the enemy
+    public Transform antEnemy;              // Reference to the ant enemy
     public GameObject bulletPrefab;      // Bullet prefab to shoot
     public Transform firePoint;          // Where bullets spawn from
     public float fireRate = 1f;          // Shots per second
@@ -17,10 +17,10 @@ public class TowerScript : MonoBehaviour
 
     void Update()
     {
-        if (enemy == null) return;
+        if (antEnemy == null) return;
 
         // Rotate tower to face the enemy
-        Vector3 direction = enemy.position - transform.position;
+        Vector3 direction = antEnemy.position - transform.position;
         direction.y = 0; // Keep rotation on horizontal plane
 
         if (direction != Vector3.zero)
@@ -45,11 +45,12 @@ public class TowerScript : MonoBehaviour
         // Create bullet at fire point
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
-        // Optional: Add velocity to bullet if it has a Rigidbody
+        // add velocity to bullet if it has a Rigidbody
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.velocity = firePoint.forward * 10f; // Adjust speed as needed
+            rb.velocity = firePoint.forward * 10f; // bullet speed
+            
         }
     }
 }
