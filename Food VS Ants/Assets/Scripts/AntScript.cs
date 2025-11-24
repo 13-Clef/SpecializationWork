@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AntScript : MonoBehaviour
@@ -10,10 +9,18 @@ public class AntScript : MonoBehaviour
     [Header("Health Settings")]
     [SerializeField] private int _health = 100;
 
+    private int _currentLane; // which lane this ant is in
     void Start()
     {
         // normalize direction to make sure consistent speed
         _moveDirection = _moveDirection.normalized;
+        
+        // determine which lane this ant is in
+        if (LaneSystem.Instance != null)
+        {
+            _currentLane = LaneSystem.Instance.GetLaneFromPosition(transform.position);
+            Debug.Log($"<color=yellow>Ant spawned in lane {_currentLane} at position {transform.position}</color>");
+        }
     }
 
     void Update()
@@ -28,8 +35,15 @@ public class AntScript : MonoBehaviour
         }
     }
 
+    public int GetLane()
+    {
+        return _currentLane;
+    }
+
     public void TakeDamage(int damage)
     {
+        _health -= damage;
+
         if (_health <= 0)
         {
             Die();
@@ -39,17 +53,5 @@ public class AntScript : MonoBehaviour
     void Die()
     {
         Destroy(gameObject);
-        Debug.Log("Ant Died!");
     }
-
-    //// Optional: Destroy enemy if it reaches the end
-    //void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("EndPoint"))
-    //    {
-    //        // Enemy reached the end, damage player or destroy
-    //        Destroy(gameObject);
-    //        Debug.Log("Enemy reached the end!");
-    //    }
-    //}
 }

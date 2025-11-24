@@ -435,11 +435,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1570921aff334b4ab4a2cb28f42d303, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  antEnemy: {fileID: 6732345142342203492, guid: adb9d75ba3db4144b9b44d299f87614e, type: 3}
-  bulletPrefab: {fileID: 5959366710827295710, guid: 2a7afb98a43482941b5030029feed80b, type: 3}
-  firePoint: {fileID: 958271729777981000}
-  fireRate: 1
-  rotationSpeed: 5
+  _attackRange: 100
+  _attackDamage: 10
+  _attackRate: 1
+  _projectilePrefab: {fileID: 5959366710827295710, guid: 2a7afb98a43482941b5030029feed80b, type: 3}
+  _firePoint: {fileID: 958271729777981000}
 --- !u!54 &209304525834210811
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -477,7 +477,7 @@ GameObject:
   m_Component:
   - component: {fileID: 958271729777981000}
   m_Layer: 0
-  m_Name: Gun
+  m_Name: Firepoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

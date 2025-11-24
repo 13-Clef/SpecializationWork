@@ -40,7 +40,5 @@ public class AntSpawner : MonoBehaviour
 
         // spawn the ant at that lane's spawn point
         GameObject ant = Instantiate(_antPrefab, spawnPoint.position, spawnPoint.rotation);
-
-        Debug.Log("Enemy spawned in lane: " + randomLane);
     }
 }

@@ -61,8 +61,6 @@ public class CrosshairScript : MonoBehaviour
                 Destroy(_currentHoverIndicator);
                 _currentHoverIndicator = null;
             }
-
-            Debug.Log("Retrieve Mode: " + _isRetrieveMode);
         }
     }
 
@@ -155,8 +153,6 @@ public class CrosshairScript : MonoBehaviour
         foodGuardian.tag = "FoodGuardian";
 
         tile.tag = "Occupied"; // change tag so it's no longer placeable
-
-        //Debug.Log("Food Guardian placed on: " + tile.name);
     }
 
     void RetrieveFoodGuardian(GameObject foodGuardian)
@@ -173,7 +169,6 @@ public class CrosshairScript : MonoBehaviour
 
         // after changing tag, destroy the food guardian
         Destroy(foodGuardian);
-        Debug.Log("Food guardian retrieved!");
     }
 
     void ShowHoverIndicator(GameObject tile, bool isRetrieveMode)
@@ -250,8 +245,6 @@ public class CrosshairScript : MonoBehaviour
             Destroy(_currentHoverIndicator);
             _currentHoverIndicator = null;
         }
-
-        Debug.Log("Retrieve Mode: " + _isRetrieveMode);
     }
 }
 
