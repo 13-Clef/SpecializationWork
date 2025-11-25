@@ -6261,7 +6261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _numberOfLanes: 5
   _laneWidth: 3
-  _laneStartPosition: {x: 1.5, y: 0, z: 0}
+  _laneStartPosition: {x: 15, y: 0, z: 0}
   _laneDirection: {x: 1, y: 0, z: 0}
 --- !u!4 &2034624802
 Transform:

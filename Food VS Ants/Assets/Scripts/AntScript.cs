@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AntScript : MonoBehaviour
 {
@@ -7,14 +9,23 @@ public class AntScript : MonoBehaviour
     [SerializeField] private Vector3 _moveDirection = Vector3.back; // move in the -Z direction to the food guardians
 
     [Header("Health Settings")]
-    [SerializeField] private int _health = 100;
+    [SerializeField] private int _maxHealth = 100;
+    [SerializeField] private int _currentHealth;
+
+    [Header("Health Bar UI")]
+    [SerializeField] private Image _healthBarFill; 
+    [SerializeField] private TextMeshProUGUI _healthText; 
 
     private int _currentLane; // which lane this ant is in
     void Start()
     {
         // normalize direction to make sure consistent speed
         _moveDirection = _moveDirection.normalized;
-        
+
+        // initialize health
+        _currentHealth = _maxHealth;
+        UpdateHealthBar();
+
         // determine which lane this ant is in
         if (LaneSystem.Instance != null)
         {
@@ -42,11 +53,28 @@ public class AntScript : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        _health -= damage;
+        _currentHealth -= damage;
+        _currentHealth = Mathf.Max(_currentHealth, 0 ); // use clamp to 0
 
-        if (_health <= 0)
+        UpdateHealthBar();
+
+        if (_currentHealth <= 0)
         {
             Die();
+        }
+    }
+
+    void UpdateHealthBar()
+    {
+        if (_healthBarFill != null)
+        {
+            float healthPercent = (float)_currentHealth / _maxHealth;
+            _healthBarFill.fillAmount = healthPercent;
+        }
+
+        if (_healthBarFill != null)
+        {
+            _healthText.text = $"{_currentHealth}/{_maxHealth}";
         }
     }
 
