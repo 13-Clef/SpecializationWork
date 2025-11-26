@@ -13,8 +13,8 @@ public class AntScript : MonoBehaviour
     [SerializeField] private int _currentHealth;
 
     [Header("Health Bar UI")]
-    [SerializeField] private Image _healthBarFill; 
-    [SerializeField] private TextMeshProUGUI _healthText; 
+    [SerializeField] private Image _healthBarFill;
+    [SerializeField] private TextMeshProUGUI _healthText;
 
     private int _currentLane; // which lane this ant is in
     void Start()
@@ -29,8 +29,6 @@ public class AntScript : MonoBehaviour
         // determine which lane this ant is in
         if (LaneSystem.Instance != null)
         {
-            _currentLane = LaneSystem.Instance.GetLaneFromPosition(transform.position);
-            Debug.Log($"<color=yellow>Ant spawned in lane {_currentLane} at position {transform.position}</color>");
         }
     }
 
@@ -38,7 +36,7 @@ public class AntScript : MonoBehaviour
     {
         // move in a straight line in the specified direction
         transform.position += _moveDirection * _movementSpeed * Time.deltaTime;
-        
+
         // delete if go into void
         if (transform.position.y <= -5f)
         {
@@ -54,7 +52,7 @@ public class AntScript : MonoBehaviour
     public void TakeDamage(int damage)
     {
         _currentHealth -= damage;
-        _currentHealth = Mathf.Max(_currentHealth, 0 ); // use clamp to 0
+        _currentHealth = Mathf.Max(_currentHealth, 0); // use clamp to 0
 
         UpdateHealthBar();
 
@@ -81,5 +79,17 @@ public class AntScript : MonoBehaviour
     void Die()
     {
         Destroy(gameObject);
+    }
+
+    // collide with food guardian to do damage
+    void OnTriggerEnter(Collider other)
+    {
+        // check if its hitting a food guardian
+        FoodGuardianScript guardian = other.GetComponent<FoodGuardianScript>();
+
+        if (guardian != null)
+        {
+
+        }
     }
 }

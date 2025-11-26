@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FoodGuardianScript : MonoBehaviour
 {
@@ -17,8 +19,22 @@ public class FoodGuardianScript : MonoBehaviour
     [SerializeField] private LayerMask _antLayer; // Optional: set layer mask for ants only
     [SerializeField] private bool _showDebugRays = true;
 
+    [Header("Health Settings")]
+    [SerializeField] private int _maxHealth = 1000;
+    [SerializeField] private int _currentHealth;
+
+    [Header("Health Bar UI")]
+    [SerializeField] private Image _healthBarFill;
+    [SerializeField] private TextMeshProUGUI _healthText;
+
     private float _attackTimer = 0f;
     private AntScript _currentAntTarget;
+
+    private void Start()
+    {
+        // Initialize health
+        _currentHealth = _maxHealth;
+    }
 
     void Update()
     {
@@ -72,7 +88,6 @@ public class FoodGuardianScript : MonoBehaviour
                 if (_currentAntTarget != ant)
                 {
                     _currentAntTarget = ant;
-                    Debug.Log($"<color=green>Guardian detected Ant at {hit.point} (Distance: {hit.distance:F1})</color>");
                 }
             }
             else
@@ -90,7 +105,6 @@ public class FoodGuardianScript : MonoBehaviour
             // No hit - clear target
             if (_currentAntTarget != null)
             {
-                Debug.Log("<color=yellow>No ant detected in range</color>");
             }
             _currentAntTarget = null;
         }
@@ -103,7 +117,6 @@ public class FoodGuardianScript : MonoBehaviour
             return;
         }
 
-        Debug.Log($"<color=magenta>Guardian ATTACKING Ant at {_currentAntTarget.transform.position}</color>");
 
         // Check if projectile prefab is assigned
         if (_projectilePrefab == null)
@@ -125,11 +138,41 @@ public class FoodGuardianScript : MonoBehaviour
         if (projScript != null)
         {
             projScript.SetAntTarget(_currentAntTarget.transform, (int)_attackDamage);
-            Debug.Log("<color=green>Projectile spawned!</color>");
         }
         else
         {
             Debug.LogError("Projectile prefab has no ProjectileScript component!");
+        }
+    }
+
+    // take damage from ants
+    public void TakeDamage(int damage)
+    {
+        _currentHealth -= damage;
+        _currentHealth = Mathf.Max(_currentHealth, 0); // use clamp to 0
+
+        if (_currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
+    }
+
+    void UpdateHealthBar()
+    {
+        if (_healthBarFill != null)
+        {
+            float healthPercent = (float)_currentHealth / _maxHealth;
+            _healthBarFill.fillAmount = healthPercent;
+        }
+
+        if (_healthBarFill != null)
+        {
+            _healthText.text = $"{_currentHealth}/{_maxHealth}";
         }
     }
 
