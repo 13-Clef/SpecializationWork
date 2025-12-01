@@ -12,11 +12,11 @@ public class AntScript : MonoBehaviour
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] private int _currentHealth;
 
-    [Header("Health Bar UI")]
-    [SerializeField] private Image _healthBarFill;
-    [SerializeField] private TextMeshProUGUI _healthText;
+    [Header("Health Bar Settings")]
+    [SerializeField] private HealthBar _healthBar;
 
     private int _currentLane; // which lane this ant is in
+
     void Start()
     {
         // normalize direction to make sure consistent speed
@@ -24,11 +24,17 @@ public class AntScript : MonoBehaviour
 
         // initialize health
         _currentHealth = _maxHealth;
-        UpdateHealthBar();
 
-        // determine which lane this ant is in
+        // set up the health bar
+        if (_healthBar != null)
+        {
+            _healthBar.SetMaxHealth(_maxHealth);
+        }
+
+        // determine which lane is the ant in
         if (LaneSystem.Instance != null)
         {
+            _currentLane = LaneSystem.Instance.GetLaneFromPosition(transform.position);
         }
     }
 
@@ -54,7 +60,11 @@ public class AntScript : MonoBehaviour
         _currentHealth -= damage;
         _currentHealth = Mathf.Max(_currentHealth, 0); // use clamp to 0
 
-        UpdateHealthBar();
+        // update health bar whenever health changes
+        if (_healthBar != null)
+        {
+            _healthBar.SetCurrentHealth(_currentHealth);
+        }
 
         if (_currentHealth <= 0)
         {
@@ -62,19 +72,6 @@ public class AntScript : MonoBehaviour
         }
     }
 
-    void UpdateHealthBar()
-    {
-        if (_healthBarFill != null)
-        {
-            float healthPercent = (float)_currentHealth / _maxHealth;
-            _healthBarFill.fillAmount = healthPercent;
-        }
-
-        if (_healthBarFill != null)
-        {
-            _healthText.text = $"{_currentHealth}/{_maxHealth}";
-        }
-    }
 
     void Die()
     {
@@ -87,9 +84,10 @@ public class AntScript : MonoBehaviour
         // check if its hitting a food guardian
         FoodGuardianScript guardian = other.GetComponent<FoodGuardianScript>();
 
+        // deal damage
         if (guardian != null)
         {
-
+         //   guardian.TakeDamage();
         }
     }
 }

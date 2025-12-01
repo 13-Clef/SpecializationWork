@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,19 +14,18 @@ public class FoodGuardianScript : MonoBehaviour
     [SerializeField] private GameObject _projectilePrefab;
     [SerializeField] private Transform _firePoint;
 
-    [Header("Detection Settings")]
+    [Header("Lane Detection Settings")]
     [SerializeField] private Vector3 _raycastDirection = Vector3.forward; // Direction to shoot raycast (toward ants)
     [SerializeField] private float _raycastWidth = 2.5f; // Width of detection (should match lane width)
-    [SerializeField] private LayerMask _antLayer; // Optional: set layer mask for ants only
+    [SerializeField] private LayerMask _antLayer; // set layer mask for ants only
     [SerializeField] private bool _showDebugRays = true;
 
     [Header("Health Settings")]
     [SerializeField] private int _maxHealth = 1000;
     [SerializeField] private int _currentHealth;
 
-    [Header("Health Bar UI")]
-    [SerializeField] private Image _healthBarFill;
-    [SerializeField] private TextMeshProUGUI _healthText;
+    [Header("Health Bar Settings")]
+    [SerializeField] private HealthBar _healthBar;
 
     private float _attackTimer = 0f;
     private AntScript _currentAntTarget;
@@ -34,10 +34,19 @@ public class FoodGuardianScript : MonoBehaviour
     {
         // Initialize health
         _currentHealth = _maxHealth;
+
+        // set up the health bar
+        if (_healthBar != null)
+        {
+            _healthBar.SetMaxHealth(_maxHealth);
+        }
     }
 
     void Update()
     {
+        // find ant in the same lane
+        //FindAntInlane();
+
         // Detect ant in front using raycast
         DetectAntWithRaycast();
 
@@ -56,10 +65,10 @@ public class FoodGuardianScript : MonoBehaviour
 
     void DetectAntWithRaycast()
     {
-        // Cast a sphere along the guardian's forward direction to detect ants
+        // cast a sphere along the guardian's forward direction to detect ants
         Vector3 rayStart = _firePoint != null ? _firePoint.position : transform.position;
 
-        // Use SphereCast to detect ants in a cylinder-shaped area (like a lane)
+        // use SphereCast to detect ants in a cylinder-shaped area (like a lane)
         RaycastHit hit;
         bool hitSomething = Physics.SphereCast(
             rayStart,
@@ -67,10 +76,10 @@ public class FoodGuardianScript : MonoBehaviour
             _raycastDirection.normalized,
             out hit,
             _attackRange,
-            _antLayer.value == 0 ? ~0 : _antLayer // Use all layers if antLayer not set
+            _antLayer.value == 0 ? ~0 : _antLayer // use all layers if antLayer not set
         );
 
-        // Debug visualization
+        // debug visualization
         if (_showDebugRays)
         {
             Debug.DrawRay(rayStart, _raycastDirection.normalized * _attackRange,
@@ -79,12 +88,12 @@ public class FoodGuardianScript : MonoBehaviour
 
         if (hitSomething)
         {
-            // Check if we hit an ant
+            // check if we hit an ant
             AntScript ant = hit.collider.GetComponent<AntScript>();
 
             if (ant != null)
             {
-                // Found an ant!
+                // food guardian finds an ant
                 if (_currentAntTarget != ant)
                 {
                     _currentAntTarget = ant;
@@ -92,7 +101,7 @@ public class FoodGuardianScript : MonoBehaviour
             }
             else
             {
-                // Hit something else, not an ant
+                // hit something else (not ant)
                 if (_currentAntTarget != null)
                 {
                     Debug.Log($"<color=yellow>Lost target - hit {hit.collider.name} instead</color>");
@@ -110,6 +119,40 @@ public class FoodGuardianScript : MonoBehaviour
         }
     }
 
+    //void FindAntInLane()
+    //{
+    //    GameObject[] ants = GameObject.FindGameObjectsWithTag("Ant");
+
+    //    AntScript closestAnt = null;
+    //    float closestDistance = _attackRange;
+
+    //    foreach (GameObject antObj in ants)
+    //    {
+    //        AntScript ant = antObj.GetComponent<AntScript>();
+    //        if (ant == null) continue;
+
+    //        // Check if ant is in the same Z-lane (same row)
+    //        float zDifference = Mathf.Abs(ant.transform.position.z - transform.position.z);
+
+    //        // Only consider ants in the same lane
+    //        if (zDifference <= _laneWidth / 2f)
+    //        {
+    //            // Check if ant is in front of guardian
+    //            float xDistance = ant.transform.position.x - transform.position.x;
+
+    //            // Only target ants that are ahead
+    //            if (xDistance > 0 && xDistance <= _attackRange)
+    //            {
+    //                // Find the closest ant
+    //                if (xDistance < closestDistance)
+    //                {
+    //                    closestDistance = xDistance;
+    //                    closestAnt = ant;
+    //                }
+    //            }
+    //        }
+    //    }
+
     void Attack()
     {
         if (_currentAntTarget == null)
@@ -118,21 +161,14 @@ public class FoodGuardianScript : MonoBehaviour
         }
 
 
-        // Check if projectile prefab is assigned
-        if (_projectilePrefab == null)
+        // check if projectile prefab is assigned
+        if (_projectilePrefab == null || _firePoint == null)
         {
-            Debug.LogError("Projectile Prefab is NOT assigned in Inspector!");
+            Debug.LogError("projectile prefab or fire point is not assigned");
             return;
         }
 
-        // Check if fire point is assigned
-        if (_firePoint == null)
-        {
-            Debug.LogError("Fire Point is NOT assigned in Inspector!");
-            return;
-        }
-
-        // Spawn projectile
+        // spawn projectile from fire point
         GameObject projectile = Instantiate(_projectilePrefab, _firePoint.position, Quaternion.identity);
         ProjectileScript projScript = projectile.GetComponent<ProjectileScript>();
         if (projScript != null)
@@ -141,7 +177,7 @@ public class FoodGuardianScript : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Projectile prefab has no ProjectileScript component!");
+            Debug.LogError("projectile is not assigned");
         }
     }
 
@@ -150,6 +186,12 @@ public class FoodGuardianScript : MonoBehaviour
     {
         _currentHealth -= damage;
         _currentHealth = Mathf.Max(_currentHealth, 0); // use clamp to 0
+
+        // update health bar whenever health changes
+        if (_healthBar != null)
+        {
+            _healthBar.SetCurrentHealth(_currentHealth);
+        }
 
         if (_currentHealth <= 0)
         {
@@ -162,21 +204,7 @@ public class FoodGuardianScript : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void UpdateHealthBar()
-    {
-        if (_healthBarFill != null)
-        {
-            float healthPercent = (float)_currentHealth / _maxHealth;
-            _healthBarFill.fillAmount = healthPercent;
-        }
-
-        if (_healthBarFill != null)
-        {
-            _healthText.text = $"{_currentHealth}/{_maxHealth}";
-        }
-    }
-
-    // Visualize attack range and detection area in the editor
+    // visualize attack range and detection area in the editor
     private void OnDrawGizmosSelected()
     {
         Vector3 start = _firePoint != null ? _firePoint.position : transform.position;
