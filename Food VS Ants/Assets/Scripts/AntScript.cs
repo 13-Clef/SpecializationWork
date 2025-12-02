@@ -1,6 +1,4 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class AntScript : MonoBehaviour
 {
@@ -15,7 +13,14 @@ public class AntScript : MonoBehaviour
     [Header("Health Bar Settings")]
     [SerializeField] private HealthBar _healthBar;
 
+    [Header("Attack Settings")]
+    [SerializeField] private int _attackDamage = 10;
+    [SerializeField] private float _attackInterval = 1f; // attacks per <?>
+
     private int _currentLane; // which lane this ant is in
+    private bool _isAttacking = false;
+    private FoodGuardianScript _targetGuardian;
+    private float _attackTimer = 0f;
 
     void Start()
     {
@@ -30,18 +35,36 @@ public class AntScript : MonoBehaviour
         {
             _healthBar.SetMaxHealth(_maxHealth);
         }
-
-        // determine which lane is the ant in
-        if (LaneSystem.Instance != null)
-        {
-            _currentLane = LaneSystem.Instance.GetLaneFromPosition(transform.position);
-        }
     }
 
     void Update()
     {
-        // move in a straight line in the specified direction
-        transform.position += _moveDirection * _movementSpeed * Time.deltaTime;
+        // if not attacking then move
+        if (!_isAttacking)
+        {
+            // move in a straight line in the (which is set to -Z direction)
+            transform.position += _moveDirection * _movementSpeed * Time.deltaTime;
+        }
+        else
+        {
+            // food guardian detected, attack
+            if (_targetGuardian != null)
+            {
+                _attackTimer += Time.deltaTime;
+
+                if (_attackTimer >= _attackInterval)
+                {
+                    attackFoodGuardian();
+                    _attackTimer = 0f;
+                }
+            }
+            else
+            {
+                // food guardian has been defeated so continue moving
+                _isAttacking = false;
+            }
+        }
+
 
         // delete if go into void
         if (transform.position.y <= -5f)
@@ -78,6 +101,14 @@ public class AntScript : MonoBehaviour
         Destroy(gameObject);
     }
 
+    void attackFoodGuardian()
+    {
+        if (_targetGuardian != null)
+        {
+            _targetGuardian.TakeDamage(_attackDamage);
+        }
+    }
+
     // collide with food guardian to do damage
     void OnTriggerEnter(Collider other)
     {
@@ -85,9 +116,24 @@ public class AntScript : MonoBehaviour
         FoodGuardianScript guardian = other.GetComponent<FoodGuardianScript>();
 
         // deal damage
-        if (guardian != null)
+        if (guardian != null && !_isAttacking)
         {
-         //   guardian.TakeDamage();
+            _isAttacking = true;
+            _targetGuardian = guardian;
+            _attackTimer = _attackInterval; // attacks immediately after touching the food guardian
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // if the food guardian is defeated, continue moving
+        FoodGuardianScript guardian = other.GetComponent<FoodGuardianScript>();
+
+        if (guardian != null && guardian == _targetGuardian)
+        {
+            _isAttacking = false;
+            _targetGuardian = null;
+            _attackTimer = 0f;
         }
     }
 }

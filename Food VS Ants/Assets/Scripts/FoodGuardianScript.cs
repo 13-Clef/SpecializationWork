@@ -1,7 +1,4 @@
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class FoodGuardianScript : MonoBehaviour
 {
@@ -44,9 +41,6 @@ public class FoodGuardianScript : MonoBehaviour
 
     void Update()
     {
-        // find ant in the same lane
-        //FindAntInlane();
-
         // Detect ant in front using raycast
         DetectAntWithRaycast();
 
@@ -57,7 +51,7 @@ public class FoodGuardianScript : MonoBehaviour
 
             if (_attackTimer >= 1f / _attackRate)
             {
-                Attack();
+                AttackAnt();
                 _attackTimer = 0f;
             }
         }
@@ -119,41 +113,7 @@ public class FoodGuardianScript : MonoBehaviour
         }
     }
 
-    //void FindAntInLane()
-    //{
-    //    GameObject[] ants = GameObject.FindGameObjectsWithTag("Ant");
-
-    //    AntScript closestAnt = null;
-    //    float closestDistance = _attackRange;
-
-    //    foreach (GameObject antObj in ants)
-    //    {
-    //        AntScript ant = antObj.GetComponent<AntScript>();
-    //        if (ant == null) continue;
-
-    //        // Check if ant is in the same Z-lane (same row)
-    //        float zDifference = Mathf.Abs(ant.transform.position.z - transform.position.z);
-
-    //        // Only consider ants in the same lane
-    //        if (zDifference <= _laneWidth / 2f)
-    //        {
-    //            // Check if ant is in front of guardian
-    //            float xDistance = ant.transform.position.x - transform.position.x;
-
-    //            // Only target ants that are ahead
-    //            if (xDistance > 0 && xDistance <= _attackRange)
-    //            {
-    //                // Find the closest ant
-    //                if (xDistance < closestDistance)
-    //                {
-    //                    closestDistance = xDistance;
-    //                    closestAnt = ant;
-    //                }
-    //            }
-    //        }
-    //    }
-
-    void Attack()
+    void AttackAnt()
     {
         if (_currentAntTarget == null)
         {

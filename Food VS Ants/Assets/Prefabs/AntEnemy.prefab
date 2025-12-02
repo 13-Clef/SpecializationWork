@@ -237,6 +237,8 @@ MonoBehaviour:
   _maxHealth: 5000
   _currentHealth: 0
   _healthBar: {fileID: 3617327548424766114}
+  _attackDamage: 10
+  _attackInterval: 1
 --- !u!54 &2621018096215408422
 Rigidbody:
   m_ObjectHideFlags: 0
