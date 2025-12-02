@@ -21,7 +21,7 @@ public class FoodGuardianScript : MonoBehaviour
     [SerializeField] private bool _showDebugRays = true;
 
     [Header("Health Settings")]
-    [SerializeField] private int _maxHealth = 1000;
+    [SerializeField] private int _maxHealth = 200;
     [SerializeField] private int _currentHealth;
 
     [Header("Health Bar Settings")]
