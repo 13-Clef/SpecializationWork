@@ -151,8 +151,6 @@ public class CrosshairScript : MonoBehaviour
 
         // tag the food guardian if it is not tagged
         foodGuardian.tag = "FoodGuardian";
-
-        tile.tag = "Occupied"; // change tag so it's no longer placeable
     }
 
     void RetrieveFoodGuardian(GameObject foodGuardian)
