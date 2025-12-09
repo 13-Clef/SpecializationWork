@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using TMPro;
 
 public class CrumbsManager : MonoBehaviour
 {
@@ -8,10 +9,10 @@ public class CrumbsManager : MonoBehaviour
     [Header("Currency Settings")]
     [SerializeField] private int _startingCumbs = 100;
     [SerializeField] private int _currentCrumbs;
+    [SerializeField] private TextMeshProUGUI _crumbsText;
 
     [Header("Generation Settings")]
     [SerializeField] private float _generationInterval = 5f; // generation per <?>
-    [SerializeField] private int _crumbsPerGeneration = 10;
     [SerializeField] private float _generationSpeedUpgrade = 0.9f; // upgradable multiplier
     [SerializeField] private int _currentGenerationLevel = 1;
 
@@ -20,12 +21,10 @@ public class CrumbsManager : MonoBehaviour
     [SerializeField] private Transform _spawnAreaMin; // set to be bottom-left corner
     [SerializeField] private Transform _spawnAreaMax; // set to be top-right corner
     [SerializeField] private int _maxCrumbsOnGround = 10;
+    [SerializeField] private TextMeshProUGUI _maxSpawnText;
 
     private float _generationTimer = 0f;
     private int _crumbsOnGround = 0;
-
-    // evemt for UI updates
-    public event Action<int> OnCrumbsChanged;
 
     void Awake()
     {
@@ -45,7 +44,12 @@ public class CrumbsManager : MonoBehaviour
     void Start()
     {
         _currentCrumbs = _startingCumbs;
-        OnCrumbsChanged?.Invoke(_currentCrumbs);
+
+        // update current crumbs
+        UpdateCrumbsUI(_currentCrumbs);
+
+        // update spawned crumbs
+        UpdateSpawnedCrumbsUI(_crumbsOnGround);
     }
 
     // Update is called once per frame
@@ -84,25 +88,37 @@ public class CrumbsManager : MonoBehaviour
 
         GameObject crumb = Instantiate(_crumbPrefab, randomPos, Quaternion.identity);
         _crumbsOnGround++;
-
-        //// set up the crumb's value
-        //CrumbPickup pickup = crumb.GetComponent<CrumbPickup>();
-        //if (pickup != null)
-        //{
-        //    pickup.SetValue(_crumbsPerGeneration);
-        //}
-
-
+        UpdateSpawnedCrumbsUI(_crumbsOnGround);
     }
     public void OnCrumbPickedUp()
     {
         _crumbsOnGround--;
+        UpdateSpawnedCrumbsUI(_crumbsOnGround);
     }
 
     public void AddCrumbs(int amount)
     {
         _currentCrumbs += amount;
-        OnCrumbsChanged?.Invoke(_currentCrumbs);
+        UpdateCrumbsUI(_currentCrumbs);
+        
+    }
+
+    // update the UI text
+    void UpdateCrumbsUI(int crumbAmount)
+    {
+        if (_crumbsText != null)
+        {
+            _crumbsText.text = $"Crumbs: {crumbAmount}";
+        }
+    }
+
+    // updates spawn UI text
+    void UpdateSpawnedCrumbsUI(int maxSpawnedAmount)
+    {
+        if (_maxSpawnText != null)
+        {
+            _maxSpawnText.text = $"Spawned: {maxSpawnedAmount}/{_maxCrumbsOnGround}";
+        }
     }
 
     // getters for UI
@@ -122,5 +138,4 @@ public class CrumbsManager : MonoBehaviour
         float currentInterval = _generationInterval * Mathf.Pow(_generationSpeedUpgrade, _currentGenerationLevel - 1);
         return currentInterval - _generationTimer;
     }
-
 }

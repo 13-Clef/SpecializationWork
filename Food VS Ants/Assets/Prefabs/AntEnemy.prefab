@@ -247,7 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementSpeed: 5
   _moveDirection: {x: 0, y: 0, z: -1}
-  _maxHealth: 5000
+  _maxHealth: 100
   _currentHealth: 0
   _healthBar: {fileID: 3617327548424766114}
   _attackDamage: 10

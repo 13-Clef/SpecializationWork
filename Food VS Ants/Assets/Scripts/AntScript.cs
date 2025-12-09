@@ -66,11 +66,6 @@ public class AntScript : MonoBehaviour
         }
 
 
-        // delete if go into void
-        if (transform.position.y <= -5f)
-        {
-            Destroy(gameObject);
-        }
     }
 
     public int GetLane()
@@ -121,6 +116,12 @@ public class AntScript : MonoBehaviour
             _isAttacking = true;
             _targetGuardian = guardian;
             _attackTimer = _attackInterval; // attacks immediately after touching the food guardian
+        }
+
+        // delete if go out of bound
+        if (other.CompareTag("Wall"))
+        {
+            Destroy(gameObject);
         }
     }
 
