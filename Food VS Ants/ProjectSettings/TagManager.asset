@@ -8,6 +8,8 @@ TagManager:
   - Occupied
   - FoodGuardian
   - Ant
+  - Crumbs
+  - Wall
   layers:
   - Default
   - TransparentFX
