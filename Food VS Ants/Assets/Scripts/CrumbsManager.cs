@@ -67,6 +67,22 @@ public class CrumbsManager : MonoBehaviour
         }
     }
 
+    public bool CanAfford(int cost)
+    {
+        return _currentCrumbs >= cost;
+    }
+
+    public bool DeductCrumbs(int amount)
+    {
+        if (CanAfford(amount))
+        {
+            _currentCrumbs -= amount;
+            UpdateCrumbsUI(_currentCrumbs);
+            return true;
+        }
+        return false;
+    }
+
     void GenerateCrumbs()
     {
         // spawn physical crumbs on the ground if below max amount

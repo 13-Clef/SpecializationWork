@@ -30,7 +30,7 @@ public class FoodGuardianScript : MonoBehaviour
 
     private void Start()
     {
-        // Initialize health
+        // initialize health
         _currentHealth = _maxHealth;
 
         // set up the health bar
@@ -42,10 +42,10 @@ public class FoodGuardianScript : MonoBehaviour
 
     void Update()
     {
-        // Detect ant in front using raycast
+        // detect ant in front using raycast
         DetectAntWithRaycast();
 
-        // Attack if we have a target
+        // attack if we have a target
         if (_currentAntTarget != null)
         {
             _attackTimer += Time.deltaTime;

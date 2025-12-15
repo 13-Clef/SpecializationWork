@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AntScript : MonoBehaviour
 {
@@ -17,10 +18,13 @@ public class AntScript : MonoBehaviour
     [SerializeField] private int _attackDamage = 10;
     [SerializeField] private float _attackInterval = 1f; // attacks per <?>
 
+
+
     private int _currentLane; // which lane this ant is in
     private bool _isAttacking = false;
     private FoodGuardianScript _targetGuardian;
     private float _attackTimer = 0f;
+
 
     void Start()
     {
@@ -35,6 +39,7 @@ public class AntScript : MonoBehaviour
         {
             _healthBar.SetMaxHealth(_maxHealth);
         }
+
     }
 
     void Update()
@@ -64,7 +69,6 @@ public class AntScript : MonoBehaviour
                 _isAttacking = false;
             }
         }
-
 
     }
 
@@ -103,6 +107,22 @@ public class AntScript : MonoBehaviour
             _targetGuardian.TakeDamage(_attackDamage);
         }
     }
+
+    //void antKilledUI()
+    //{
+    //    if (_antKilledText.text != null)
+    //    {
+    //        _antKilledText.text = $"Ant Killed: {_antKilled}/10";
+    //    }
+    //}
+
+    //void antEscapeUI()
+    //{
+    //    if (_antEscapeText.text != null)
+    //    {
+    //        _antEscapeText.text = $"Ant Escaped: {_antEscape}/5";
+    //    }
+    //}
 
     // collide with food guardian to do damage
     void OnTriggerEnter(Collider other)
