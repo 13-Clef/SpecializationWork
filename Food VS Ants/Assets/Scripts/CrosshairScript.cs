@@ -29,10 +29,14 @@ public class CrosshairScript : MonoBehaviour
     private GameObject _currentTargetTile;
     private bool _isRetrieveMode = false;
     private int _selectedSlotIndex = 0; // start at slot 1
+    private LayerMask _antDetectionLayer;
 
     void Start()
     {
         _mainCamera = Camera.main;
+
+        // ignore AntDetection Box collider by using ignore raycast layer
+        _antDetectionLayer = ~LayerMask.GetMask("AntDetection");
     }
 
     void Update()
@@ -170,7 +174,7 @@ public class CrosshairScript : MonoBehaviour
         Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, _raycastDistance))
+        if (Physics.Raycast(ray, out hit, _raycastDistance, _antDetectionLayer))
         {
             if (hit.collider.CompareTag("PlaceableTile"))
             {
@@ -197,7 +201,7 @@ public class CrosshairScript : MonoBehaviour
         Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, _raycastDistance))
+        if (Physics.Raycast(ray, out hit, _raycastDistance, _antDetectionLayer))
         {
             if (hit.collider.CompareTag("FoodGuardian"))
             {

@@ -3,56 +3,37 @@ using UnityEngine;
 public class ProjectileScript : MonoBehaviour
 {
     [Header("Projectile Settings")]
-    [SerializeField] private float _maxLifetime = 5f; // timer for bullet to despawn
-    [SerializeField] private float _projectileSpeed = 10f; 
-    
-    private Transform _antTarget;
-    private int _damage;
-    private float _lifetimeTimer = 0f;
+    [SerializeField] private float _projectileSpeed = 10f;
+    [SerializeField] private float _bulletLife = 3f;
+    [SerializeField] private int _damage = 10;
 
-    public void SetAntTarget(Transform antTarget, int damage)
+    // Start is called before the first frame update
+    void Start()
     {
-        _antTarget = antTarget;
-        _damage = damage;
+        // destroy bullet if it does not touch wall or still alive
+        Destroy(gameObject, _bulletLife);   
     }
 
     // Update is called once per frame
     void Update()
     {
-        // destroy projectile if its not destroyed within 5 seconds
-        _lifetimeTimer += Time.deltaTime;
-        if (_lifetimeTimer >= _maxLifetime)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        transform.position += transform.forward * Time.deltaTime * _projectileSpeed;
+    }
 
-        // if the targeted ant still exist
-        if (_antTarget == null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        
-        // move towards ant target
-        Vector3 direction = (_antTarget.position - transform.position).normalized;
-        transform.position += direction * _projectileSpeed * Time.deltaTime;
-
-        // check if reached ant target
-        if (Vector3.Distance(transform.position, _antTarget.position) < 0.5f)
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ant"))
         {
             // deal damage
-            AntScript ant = _antTarget.GetComponent<AntScript>();
+            AntScript ant = other.GetComponent<AntScript>();
             if (ant != null)
             {
                 ant.TakeDamage(_damage);
+                Destroy(gameObject);
             }
-
-            Destroy(gameObject);
         }
 
-        // destroy if out of bound
-        if (transform.position.z >= 30)
+        if (other.gameObject.CompareTag("BulletWall"))
         {
             Destroy(gameObject);
         }

@@ -10,10 +10,6 @@ public class CrumbPickup : MonoBehaviour
     [SerializeField] private float _bobSpeed = 2f;
     [SerializeField] private float _bobHeight = 0.3f;
 
-    //[Header("Audio Settings")]
-    //[SerializeField] private AudioClip _pickupSound;
-    //[SerializeField] private GameObject _pickupVFX;
-
     private Vector3 _startPosition;
     //private AudioSource _audioSource;
 
@@ -62,19 +58,6 @@ public class CrumbPickup : MonoBehaviour
             CrumbsManager.Instance.OnCrumbPickedUp();
         }
 
-        // play sound
-        //if (_pickupSound != null && _audioSource != null)
-        //{
-        //    AudioSource.PlayClipAtPoint(_pickupSound, transform.position);
-        //}
-
-        // spawn VFX if available
-        //if (_pickupVFX != null)
-        //{
-        //    Instantiate(_pickupVFX, transform.position, Quaternion.identity);
-        //}
-
-        // destroy the crumb after being collected
         Destroy(gameObject);
     }
 }

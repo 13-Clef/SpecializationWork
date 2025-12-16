@@ -9,7 +9,8 @@ TagManager:
   - FoodGuardian
   - Ant
   - Crumbs
-  - Wall
+  - AntWall
+  - BulletWall
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Ant
   - FoodGuardian
   - Projectile
-  - 
+  - AntDetection
   - 
   - 
   - 

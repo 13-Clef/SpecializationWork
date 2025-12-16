@@ -108,22 +108,6 @@ public class AntScript : MonoBehaviour
         }
     }
 
-    //void antKilledUI()
-    //{
-    //    if (_antKilledText.text != null)
-    //    {
-    //        _antKilledText.text = $"Ant Killed: {_antKilled}/10";
-    //    }
-    //}
-
-    //void antEscapeUI()
-    //{
-    //    if (_antEscapeText.text != null)
-    //    {
-    //        _antEscapeText.text = $"Ant Escaped: {_antEscape}/5";
-    //    }
-    //}
-
     // collide with food guardian to do damage
     void OnTriggerEnter(Collider other)
     {
@@ -138,8 +122,10 @@ public class AntScript : MonoBehaviour
             _attackTimer = _attackInterval; // attacks immediately after touching the food guardian
         }
 
+        // if touches AntDetection, FoodGuardian can attack
+
         // delete if go out of bound
-        if (other.CompareTag("Wall"))
+        if (other.CompareTag("AntWall"))
         {
             Destroy(gameObject);
         }
