@@ -17,6 +17,10 @@ public class FoodGuardianScript : MonoBehaviour
     [Header("Health Bar Settings")]
     [SerializeField] private HealthBar _healthBar;
 
+    [Header("Detection Settings")]
+    [SerializeField] private bool _canFoodGuardianAttack = false;
+    private int _antsInRangeofFoodGuardian = 0;
+
     private void Start()
     {
         // initialize health
@@ -31,7 +35,11 @@ public class FoodGuardianScript : MonoBehaviour
 
     void Update()
     {
-        FoodGuardianAttacksAnt();
+        // only attack if ants are being detected in the RowDetectors
+        if (_canFoodGuardianAttack)
+        {
+            FoodGuardianAttacksAnt();
+        }
     }
 
     // food guardian attacking
@@ -87,5 +95,34 @@ public class FoodGuardianScript : MonoBehaviour
             }
         }
         Destroy(gameObject);
+    }
+
+    // detect when ant enters the DetectionZone (attack range)
+    private void OnTriggerEnter(Collider other)
+    {
+        // check if the colliding object is an ant
+        if (other.GetComponent<AntScript>() != null)
+        {
+            _antsInRangeofFoodGuardian++;
+            _canFoodGuardianAttack = true;
+        }
+    }
+
+    // detect when ant leaves the DetectionZone (attack range)
+    private void OnTriggerExit(Collider other)
+    {
+        // check if the colliding object is an ant
+        if (other.GetComponent<AntScript>() != null)
+        {
+            _antsInRangeofFoodGuardian--;
+
+            // stop attacking if no ants remain in the DetectionZone (range)
+            if (_antsInRangeofFoodGuardian <= 0)
+            {
+                _antsInRangeofFoodGuardian = 0; // prevent negative values
+                _canFoodGuardianAttack = false;
+                _projectileSpawnTimer = 0; // reset timer when no ants detected
+            }
+        }
     }
 }
