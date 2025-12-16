@@ -15,7 +15,7 @@ public class CrosshairScript : MonoBehaviour
     [Header("Food Guardians Settings")]
     [SerializeField] private GameObject[] _foodGuardianPrefabs;
     [SerializeField] private float _towerYOffset = 2f;
-    [SerializeField] private int _foodGuardianPlacementCost = 20;
+    [SerializeField] private int _foodGuardianPlacementCost = 50;
 
     [Header("Visual Feedback Settings")]
     [SerializeField] private Transform _handDisplayParent;
@@ -24,12 +24,13 @@ public class CrosshairScript : MonoBehaviour
     [SerializeField] private Vector3 _displayLocalRotation = new Vector3(0f, 0f, 0f);
     private GameObject _instantiatedDisplay;
 
-    private Camera _mainCamera;
-    private GameObject _currentHoverIndicator;
-    private GameObject _currentTargetTile;
-    private bool _isRetrieveMode = false;
+    // runtime state variables
+    private Camera _mainCamera; // raycast origin
+    private GameObject _currentHoverIndicator; // current indicator instance
+    private GameObject _currentTargetTile; // tile to place on
+    private bool _isRetrieveMode = false; // toggle between place/retrieve
     private int _selectedSlotIndex = 0; // start at slot 1
-    private LayerMask _antDetectionLayer;
+    private LayerMask _antDetectionLayer; // layer mask to ignore ant detection layer
 
     void Start()
     {
@@ -37,6 +38,9 @@ public class CrosshairScript : MonoBehaviour
 
         // ignore AntDetection Box collider by using ignore raycast layer
         _antDetectionLayer = ~LayerMask.GetMask("AntDetection");
+
+        // display slot 1
+        UpdateHandDisplay(0);
     }
 
     void Update()
@@ -65,48 +69,48 @@ public class CrosshairScript : MonoBehaviour
 
     void CheckFoodGuardianSlotSelection()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++) // slot 1-5 (keys 1-5)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
-                int newIndex = i;
+                int newIndex = i; // slot index coreresponding to key pressed
 
+                // pressing the same slot again deselects it
                 if (_selectedSlotIndex == newIndex)
                 {
-                    // Deselect
+                    // deselect by using slot 6 (which is empty)
                     _selectedSlotIndex = 5;
                     UpdateHandDisplay(5);
-                    Debug.Log($"<color=yellow>Deselected slot {newIndex + 1}</color>");
                 }
                 else
                 {
-                    // Try to select new slot
+                    // if slot exists and has guardian prefab assigned else slot is empty
                     if (newIndex < _foodGuardianPrefabs.Length && _foodGuardianPrefabs[newIndex] != null)
                     {
+                        // check if player can afford placement
                         if (CrumbsManager.Instance != null && CrumbsManager.Instance.GetCurrentCrumbs() >= _foodGuardianPlacementCost)
                         {
                             _selectedSlotIndex = newIndex;
-                            _isRetrieveMode = false;
+                            _isRetrieveMode = false; // switch back to placement mode
                             UpdateHandDisplay(_selectedSlotIndex);
-                            Debug.Log($"<color=green>Selected slot {_selectedSlotIndex + 1}! Cost: {_foodGuardianPlacementCost} crumbs</color>");
                         }
+                        // if player have no crumbs, use slot 6 to act as insufficient crumbs
                         else
                         {
-                            int currentCrumbs = CrumbsManager.Instance != null ? CrumbsManager.Instance.GetCurrentCrumbs() : 0;
-                            Debug.Log($"<color=red>Not enough crumbs! Need {_foodGuardianPlacementCost}, have {currentCrumbs}</color>");
+                            //int currentCrumbs = CrumbsManager.Instance != null ? CrumbsManager.Instance.GetCurrentCrumbs() : 0;
                             _selectedSlotIndex = 5;
                             UpdateHandDisplay(5);
                         }
                     }
+                    // current slot is empty so use slot 6 which is an empty slot
                     else
                     {
-                        Debug.Log($"<color=red>Slot {newIndex + 1} is empty!</color>");
                         _selectedSlotIndex = 5;
                         UpdateHandDisplay(5);
                     }
                 }
 
-                // Cleanup
+                // clear hover indicator since slot selection has changed
                 HideHoverIndicator();
                 if (_currentHoverIndicator != null)
                 {
@@ -131,6 +135,7 @@ public class CrosshairScript : MonoBehaviour
         {
             GameObject prefabToDisplay = _foodGuardianDisplayPrefabs[selectedIndex];
 
+            // spawns the selected slot prefab and display it on hand
             if (prefabToDisplay != null)
             {
                 _instantiatedDisplay = Instantiate(prefabToDisplay, _handDisplayParent);
@@ -144,17 +149,18 @@ public class CrosshairScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
+            // toggle mode (placement/retrieval)
             _isRetrieveMode = !_isRetrieveMode;
+            UpdateHandDisplay(_selectedSlotIndex);
 
+            // retrieve mode = no hand display, placement mode = current slot hand display
             if (_isRetrieveMode)
             {
-                _selectedSlotIndex = 5;
-                UpdateHandDisplay(5);
-                Debug.Log("<color=cyan>Retrieve mode ON</color>");
+                UpdateHandDisplay(5); // no hand display
             }
             else
             {
-                Debug.Log("<color=cyan>Placement mode ON</color>");
+                UpdateHandDisplay(_selectedSlotIndex); // current slot hand display
             }
 
             HideHoverIndicator();
@@ -264,14 +270,16 @@ public class CrosshairScript : MonoBehaviour
         foodGuardian.tag = "FoodGuardian";
 
         tile.tag = "Occupied";
-
-        // Auto-deselect
-        _selectedSlotIndex = 5;
-        UpdateHandDisplay(5);
     }
 
     void RetrieveFoodGuardian(GameObject foodGuardian)
     {
+        if (CrumbsManager.Instance != null)
+        {
+            // refund food guardian crumbs by 50% of its cost
+            CrumbsManager.Instance.AddCrumbs(_foodGuardianPlacementCost / 2);
+        }
+
         RaycastHit hit;
         if (Physics.Raycast(foodGuardian.transform.position, Vector3.down, out hit, 10f))
         {
@@ -282,7 +290,6 @@ public class CrosshairScript : MonoBehaviour
         }
 
         Destroy(foodGuardian);
-        Debug.Log("<color=yellow>Guardian retrieved</color>");
     }
 
     void ShowHoverIndicator(GameObject tile, bool isRetrieveMode)
