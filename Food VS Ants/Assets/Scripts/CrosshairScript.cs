@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,17 +13,10 @@ public class CrosshairScript : MonoBehaviour
     [SerializeField] private float _indicatorYOffset = 2f;
     [SerializeField] private GameObject _retrieveIndicatorPrefab;
 
-    [Header("Food Guardians Settings")]
-    [SerializeField] private GameObject[] _foodGuardianPrefabs;
-    [SerializeField] private float _towerYOffset = 2f;
-    [SerializeField] private int _foodGuardianPlacementCost = 50;
-
-    [Header("Visual Feedback Settings")]
-    [SerializeField] private Transform _handDisplayParent;
-    [SerializeField] private GameObject[] _foodGuardianDisplayPrefabs;
-    [SerializeField] private Vector3 _displayLocalPosition = new Vector3(0.0f, 0.0f, 0.65f);
-    [SerializeField] private Vector3 _displayLocalRotation = new Vector3(0f, 0f, 0f);
-    private GameObject _instantiatedDisplay;
+    [Header("Manager References")]
+    [SerializeField] private HandDisplayManager _handDisplayManager;
+    [SerializeField] private FoodGuardianManager _foodGuardianManager;
+    [SerializeField] private DeploymentCooldownManager _deploymentCooldownManager;
 
     // runtime state variables
     private Camera _mainCamera; // raycast origin
@@ -54,7 +48,7 @@ public class CrosshairScript : MonoBehaviour
         }
         else
         {
-            if (_selectedSlotIndex >= 0 && _selectedSlotIndex < _foodGuardianPrefabs.Length)
+            if (_foodGuardianManager != null && _foodGuardianManager.IsSlotValid(_selectedSlotIndex))
             {
                 CheckPlacement();
                 HandlePlacement();
@@ -84,11 +78,14 @@ public class CrosshairScript : MonoBehaviour
                 }
                 else
                 {
-                    // if slot exists and has guardian prefab assigned else slot is empty
-                    if (newIndex < _foodGuardianPrefabs.Length && _foodGuardianPrefabs[newIndex] != null)
+                    // check if slot has a valid guardian prefab, whether player can afford it and it is NOT on cooldown
+                    if (_foodGuardianManager != null && _foodGuardianManager.IsSlotValid(newIndex))
                     {
-                        // check if player can afford placement
-                        if (CrumbsManager.Instance != null && CrumbsManager.Instance.GetCurrentCrumbs() >= _foodGuardianPlacementCost)
+                        // check if food guardian is on cooldown
+                        bool isReadyForPlacement = _deploymentCooldownManager == null || _deploymentCooldownManager.IsSlotReadyForPlacement(newIndex);
+
+                        // and player can afford the food guardian
+                        if (isReadyForPlacement && _foodGuardianManager.CanAffordPlacement())
                         {
                             _selectedSlotIndex = newIndex;
                             _isRetrieveMode = false; // switch back to placement mode
@@ -125,23 +122,9 @@ public class CrosshairScript : MonoBehaviour
 
     void UpdateHandDisplay(int selectedIndex)
     {
-        if (_instantiatedDisplay != null)
+        if (_handDisplayManager != null)
         {
-            Destroy(_instantiatedDisplay);
-            _instantiatedDisplay = null;
-        }
-
-        if (selectedIndex >= 0 && selectedIndex < _foodGuardianDisplayPrefabs.Length && _handDisplayParent != null)
-        {
-            GameObject prefabToDisplay = _foodGuardianDisplayPrefabs[selectedIndex];
-
-            // spawns the selected slot prefab and display it on hand
-            if (prefabToDisplay != null)
-            {
-                _instantiatedDisplay = Instantiate(prefabToDisplay, _handDisplayParent);
-                _instantiatedDisplay.transform.localPosition = _displayLocalPosition;
-                _instantiatedDisplay.transform.localEulerAngles = _displayLocalRotation;
-            }
+            _handDisplayManager.UpdateHandDisplay(selectedIndex);
         }
     }
 
@@ -151,7 +134,6 @@ public class CrosshairScript : MonoBehaviour
         {
             // toggle mode (placement/retrieval)
             _isRetrieveMode = !_isRetrieveMode;
-            UpdateHandDisplay(_selectedSlotIndex);
 
             // retrieve mode = no hand display, placement mode = current slot hand display
             if (_isRetrieveMode)
@@ -215,7 +197,10 @@ public class CrosshairScript : MonoBehaviour
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    RetrieveFoodGuardian(hit.collider.gameObject);
+                    if (_foodGuardianManager != null)
+                    {
+                        _foodGuardianManager.RetrieveFoodGuardian(hit.collider.gameObject);
+                    }
                 }
             }
             else
@@ -233,63 +218,24 @@ public class CrosshairScript : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (_currentTargetTile != null)
+            if (_currentTargetTile != null && _foodGuardianManager != null)
             {
-                if (_selectedSlotIndex >= 0 && _selectedSlotIndex < _foodGuardianPrefabs.Length)
-                {
-                    GameObject prefabToPlace = _foodGuardianPrefabs[_selectedSlotIndex];
+                // check if slot is ready (not on cooldown)
+                bool isReadyForPlacement = _deploymentCooldownManager == null || _deploymentCooldownManager.IsSlotReadyForPlacement(_selectedSlotIndex);
 
-                    if (prefabToPlace != null)
+                if (isReadyForPlacement && _foodGuardianManager.CanAffordPlacement())
+                {
+                    // place the current food guardian
+                    _foodGuardianManager.PlaceFoodGuardian(_currentTargetTile, _selectedSlotIndex);
+
+                    // then start cooldown for the current food guardian
+                    if (_deploymentCooldownManager != null)
                     {
-                        if (CrumbsManager.Instance != null && CrumbsManager.Instance.CanAfford(_foodGuardianPlacementCost))
-                        {
-                            PlaceFoodGuardian(_currentTargetTile, prefabToPlace);
-                        }
-                        else
-                        {
-                            Debug.Log("<color=red>Not enough crumbs to place!</color>");
-                        }
+                        _deploymentCooldownManager.StartCooldown(_selectedSlotIndex);
                     }
                 }
             }
         }
-    }
-
-    void PlaceFoodGuardian(GameObject tile, GameObject foodGuardianPrefab)
-    {
-        if (CrumbsManager.Instance != null)
-        {
-            // place food guardian deduct crumbs from its cost
-            CrumbsManager.Instance.AddCrumbs(-_foodGuardianPlacementCost);
-        }
-
-        Vector3 spawnPosition = tile.transform.position;
-        spawnPosition.y += _towerYOffset;
-
-        GameObject foodGuardian = Instantiate(foodGuardianPrefab, spawnPosition, Quaternion.identity);
-        foodGuardian.tag = "FoodGuardian";
-
-        tile.tag = "Occupied";
-    }
-
-    void RetrieveFoodGuardian(GameObject foodGuardian)
-    {
-        if (CrumbsManager.Instance != null)
-        {
-            // refund food guardian crumbs by 50% of its cost
-            CrumbsManager.Instance.AddCrumbs(_foodGuardianPlacementCost / 2);
-        }
-
-        RaycastHit hit;
-        if (Physics.Raycast(foodGuardian.transform.position, Vector3.down, out hit, 10f))
-        {
-            if (hit.collider.CompareTag("Occupied"))
-            {
-                hit.collider.tag = "PlaceableTile";
-            }
-        }
-
-        Destroy(foodGuardian);
     }
 
     void ShowHoverIndicator(GameObject tile, bool isRetrieveMode)
@@ -342,11 +288,6 @@ public class CrosshairScript : MonoBehaviour
         if (_currentHoverIndicator != null)
         {
             Destroy(_currentHoverIndicator);
-        }
-
-        if (_instantiatedDisplay != null)
-        {
-            Destroy(_instantiatedDisplay);
         }
     }
 
