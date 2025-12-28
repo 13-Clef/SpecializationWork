@@ -36,7 +36,7 @@ public class FoodGuardianManager : MonoBehaviour
         spawnPosition.y += _towerYOffset;
 
         // instantiate the tower
-        GameObject foodGuardian = Instantiate(prefabToPlace, spawnPosition, Quaternion.identity);
+        GameObject foodGuardian = Instantiate(prefabToPlace, spawnPosition, prefabToPlace.transform.rotation);
         foodGuardian.tag = "FoodGuardian";
 
         // mark tile as occupied after placing

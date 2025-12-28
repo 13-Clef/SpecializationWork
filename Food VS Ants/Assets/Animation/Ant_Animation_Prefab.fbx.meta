@@ -1,0 +1,440 @@
+fileFormatVersion: 2
+guid: fea5ae458d4dcc043b17333d28b6bb97
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: FullAnimation
+      takeName: Take 001
+      internalID: 1827226128182048838
+      firstFrame: 0
+      lastFrame: 2274
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Ant_Walking
+      takeName: Take 001
+      internalID: 9067093048684652814
+      firstFrame: 370
+      lastFrame: 440
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Ant_Attack
+      takeName: Take 001
+      internalID: -3291206362154003629
+      firstFrame: 2145
+      lastFrame: 2274
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Ant_Death
+      takeName: Take 001
+      internalID: 1465369574596688972
+      firstFrame: 1240
+      lastFrame: 1340
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 1
+    maxBonesPerVertex: 255
+    minBoneWeight: 0.5
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton:
+    - name: Ant_Animation_Prefab(Clone)
+      parentName: 
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.00000013315805, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ant
+      parentName: Ant_Animation_Prefab(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ant
+      parentName: ant
+      position: {x: 0, y: 722.0192, z: -119.87441}
+      rotation: {x: 0.033124037, y: 0.70633054, z: 0.03312396, w: 0.70633054}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ant
+      parentName: ant
+      position: {x: 106.25182, y: -72.03085, z: 0.000004}
+      rotation: {x: 0.48451844, y: -0.87478113, z: 0.000000013038516, w: 0.00000011920929}
+      scale: {x: 0.99999964, y: 1, z: 0.9999999}
+    - name: ant
+      parentName: ant
+      position: {x: -115.50691, y: 0.000015, z: -0.000004}
+      rotation: {x: -0.013884492, y: -0.018489541, z: 0.007258891, w: 0.9997064}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    - name: ant
+      parentName: ant
+      position: {x: -84.143814, y: -0.063934, z: 8.369812}
+      rotation: {x: 0.00944086, y: -0.0005002151, z: 0.0032140785, w: 0.9999502}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: ant
+      parentName: ant
+      position: {x: -129.00891, y: 0.000031, z: 0}
+      rotation: {x: 0.20554985, y: -0.55645627, z: 0.25176927, w: 0.7646686}
+      scale: {x: 1, y: 1.0000002, z: 1.0000001}
+    - name: ant
+      parentName: ant
+      position: {x: -80.049446, y: 0.000031, z: 0.000004}
+      rotation: {x: 0.012613277, y: -0.10983416, z: 0.018260978, w: 0.9937022}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: ant
+      parentName: ant
+      position: {x: -72.178955, y: 0, z: -0.000004}
+      rotation: {x: 0.00000035580732, y: 0.00000016854986, z: -0.22235009, w: -0.9749669}
+      scale: {x: 0.99999994, y: 1.0000002, z: 1.0000001}
+    - name: ant
+      parentName: ant
+      position: {x: -66.43208, y: -0.000031, z: 0.000011}
+      rotation: {x: 0, y: 0, z: 0.044737063, w: 0.9989988}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ant 1
+      parentName: ant
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.00000069746255, y: 0.000000052214702, z: -0.0032686435, w: 0.99999464}
+      scale: {x: 1.0000005, y: 1.0000001, z: 1.0000004}
+    - name: ant 4
+      parentName: ant
+      position: {x: -122.22998, y: -19.438507, z: -26.924118}
+      rotation: {x: -0.646235, y: -0.75099194, z: 0.06724687, w: 0.11776753}
+      scale: {x: 0.9999998, y: 1.0000004, z: 0.9999999}
+    - name: ant
+      parentName: ant 4
+      position: {x: -131.70575, y: 0, z: 0.000015}
+      rotation: {x: 0.71617424, y: 0.13817844, z: -0.000538677, w: 0.684106}
+      scale: {x: 1, y: 1, z: 0.9999998}
+    - name: ant
+      parentName: ant
+      position: {x: -264.23624, y: 0, z: 0}
+      rotation: {x: 0.4973258, y: 0.22142951, z: -0.14907046, w: 0.8254781}
+      scale: {x: 1.0000007, y: 1.0000006, z: 1.0000002}
+    - name: ant
+      parentName: ant
+      position: {x: -331.72293, y: 0, z: 0.000027}
+      rotation: {x: -0.1315215, y: -0.11124505, z: -0.16550751, w: 0.9710479}
+      scale: {x: 1.0000001, y: 0.99999994, z: 0.99999994}
+    - name: ant 2
+      parentName: ant
+      position: {x: 59.539345, y: -79.29123, z: -31.772285}
+      rotation: {x: -0.40438634, y: -0.89416015, z: 0.062470563, w: 0.18178764}
+      scale: {x: 1.0000004, y: 1, z: 1.0000002}
+    - name: ant
+      parentName: ant 2
+      position: {x: -61.29657, y: 0.000031, z: -0.000008}
+      rotation: {x: 0.022731839, y: 0.1596392, z: -0.5688314, w: 0.80649203}
+      scale: {x: 1.0000005, y: 1, z: 1.0000004}
+    - name: ant
+      parentName: ant
+      position: {x: -346.74115, y: 0, z: -0.000008}
+      rotation: {x: -0.011315874, y: -0.054722004, z: 0.62528795, w: 0.7783909}
+      scale: {x: 1.0000001, y: 1.0000001, z: 0.99999994}
+    - name: ant
+      parentName: ant
+      position: {x: -514.9934, y: -0.000031, z: 0.000025}
+      rotation: {x: -0.026983049, y: -0.042677876, z: -0.31119812, w: 0.94900274}
+      scale: {x: 0.99999994, y: 0.9999999, z: 1}
+    - name: ant 7
+      parentName: ant
+      position: {x: -122.23044, y: -19.438782, z: 26.924097}
+      rotation: {x: -0.64623517, y: -0.75099206, z: -0.06724625, w: -0.117767006}
+      scale: {x: 1.0000001, y: 1, z: 1.0000002}
+    - name: ant
+      parentName: ant 7
+      position: {x: -131.70576, y: -0.000031, z: -0.000015}
+      rotation: {x: 0.71617264, y: 0.13817836, z: 0.0005384087, w: -0.68410766}
+      scale: {x: 1, y: 1.0000001, z: 1.0000002}
+    - name: ant
+      parentName: ant
+      position: {x: -264.23624, y: 0.000031, z: 0.000031}
+      rotation: {x: -0.49732846, y: -0.22142991, z: -0.14906979, w: 0.8254765}
+      scale: {x: 0.9999999, y: 0.9999999, z: 0.9999998}
+    - name: ant
+      parentName: ant
+      position: {x: -331.72293, y: 0, z: 0}
+      rotation: {x: 0.13152142, y: 0.111244746, z: -0.16550782, w: 0.9710479}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
+    - name: ant 5
+      parentName: ant
+      position: {x: 59.539345, y: -79.29161, z: 31.772308}
+      rotation: {x: -0.4043846, y: -0.89416105, z: -0.06247007, w: -0.18178776}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ant
+      parentName: ant 5
+      position: {x: -61.296295, y: 0.000015, z: 0.000008}
+      rotation: {x: 0.022731466, y: 0.1596392, z: 0.56883, w: -0.80649304}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000005}
+    - name: ant
+      parentName: ant
+      position: {x: -346.74118, y: 0, z: -0.000027}
+      rotation: {x: 0.011315979, y: 0.054722607, z: 0.625288, w: 0.7783909}
+      scale: {x: 1.0000001, y: 1.0000001, z: 0.9999996}
+    - name: ant
+      parentName: ant
+      position: {x: -514.9934, y: -0.000031, z: 0.00005}
+      rotation: {x: -0.026982803, y: -0.04267747, z: 0.31119806, w: -0.94900286}
+      scale: {x: 1.0000004, y: 1, z: 1.0000001}
+    - name: ant 3
+      parentName: ant
+      position: {x: -6.608429, y: -65.29767, z: -30.693054}
+      rotation: {x: -0.5773739, y: -0.7631344, z: 0.15271123, w: 0.24686936}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ant
+      parentName: ant 3
+      position: {x: -81.346924, y: -0.000015, z: 0.000015}
+      rotation: {x: 0.08981007, y: 0.36050263, z: -0.7592362, w: 0.5343524}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+    - name: ant
+      parentName: ant
+      position: {x: -325.50415, y: 0, z: -0.000015}
+      rotation: {x: -0.06267851, y: -0.25825348, z: 0.7849877, w: 0.5596168}
+      scale: {x: 1.0000001, y: 1.0000001, z: 0.9999997}
+    - name: ant
+      parentName: ant
+      position: {x: -437.5067, y: 0.000031, z: 0.000031}
+      rotation: {x: 0.0703587, y: 0.044817522, z: -0.18422568, w: 0.9793376}
+      scale: {x: 0.9999996, y: 0.9999998, z: 1.0000001}
+    - name: ant 6
+      parentName: ant
+      position: {x: -6.608765, y: -65.29761, z: 30.693096}
+      rotation: {x: 0.5773739, y: 0.763136, z: 0.15270849, w: 0.24686629}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1.0000001}
+    - name: ant
+      parentName: ant 6
+      position: {x: -81.34715, y: 0, z: 0}
+      rotation: {x: -0.08981109, y: -0.36050686, z: -0.75923413, w: 0.5343523}
+      scale: {x: 1, y: 0.9999996, z: 1.0000001}
+    - name: ant
+      parentName: ant
+      position: {x: -325.5044, y: 0.000008, z: 0}
+      rotation: {x: 0.06267844, y: 0.25825325, z: 0.78498757, w: 0.55961716}
+      scale: {x: 1.0000002, y: 0.9999998, z: 1.0000002}
+    - name: ant
+      parentName: ant
+      position: {x: -437.50687, y: 0, z: 0.000015}
+      rotation: {x: -0.044908945, y: -0.032724272, z: -0.24555928, w: 0.96778774}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1.0000005}
+    - name: ant 1
+      parentName: ant
+      position: {x: -221.48749, y: 0, z: 0.000011}
+      rotation: {x: -0.000000044703484, y: 0.00000011920929, z: -0.0021227617, w: 0.99999774}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ant 2
+      parentName: ant 1
+      position: {x: -131.36069, y: -68.28369, z: -65.305084}
+      rotation: {x: -0.15383455, y: 0.0956075, z: 0.44241065, w: 0.87833196}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000002}
+    - name: ant 1
+      parentName: ant 1
+      position: {x: -131.36066, y: -68.28369, z: 65.3051}
+      rotation: {x: 0.87833196, y: 0.44241062, z: 0.0956077, w: -0.15383439}
+      scale: {x: 1.0000001, y: 1.0000004, z: 1.0000004}
+    - name: ant 3
+      parentName: ant 1
+      position: {x: -206.01093, y: -44.38739, z: 32.238983}
+      rotation: {x: -0.87729585, y: 0.082625054, z: 0.47277987, w: -0.0020928604}
+      scale: {x: 1.0000005, y: 1.0000005, z: 1.0000001}
+    - name: ant
+      parentName: ant 3
+      position: {x: -236.79416, y: -0.000092, z: 0.000031}
+      rotation: {x: -0.07008537, y: 0.2020446, z: -0.40919653, w: 0.8870312}
+      scale: {x: 0.9999998, y: 0.99999994, z: 1.0000002}
+    - name: ant
+      parentName: ant 1
+      position: {x: -206.0109, y: -44.38733, z: -32.239292}
+      rotation: {x: 0.002093184, y: -0.4727797, z: -0.08262543, w: 0.87729585}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
+    - name: ant
+      parentName: ant
+      position: {x: -236.79437, y: 0.000061, z: 0.000015}
+      rotation: {x: 0.07008315, y: 0.20204176, z: 0.40919662, w: 0.8870319}
+      scale: {x: 1.0000001, y: 0.99999976, z: 0.99999976}
+    - name: ant 1
+      parentName: Ant_Animation_Prefab(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.7071067, y: 0, z: -0, w: 0.7071069}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: ant
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

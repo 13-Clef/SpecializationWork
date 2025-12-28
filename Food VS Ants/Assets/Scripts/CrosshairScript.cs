@@ -4,9 +4,6 @@ using UnityEngine.UI;
 
 public class CrosshairScript : MonoBehaviour
 {
-    [Header("Crosshair Settings")]
-    [SerializeField] private RawImage _crossHairImage;
-
     [Header("Placement/Retrieving Settings")]
     [SerializeField] private float _raycastDistance = 100f;
     [SerializeField] private GameObject _hoverIndicatorPrefab;
@@ -157,7 +154,7 @@ public class CrosshairScript : MonoBehaviour
 
     void CheckPlacement()
     {
-        if (_crossHairImage == null || _mainCamera == null) return;
+        if (_mainCamera == null) return;
 
         Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
@@ -184,7 +181,7 @@ public class CrosshairScript : MonoBehaviour
 
     void CheckRetrieve()
     {
-        if (_crossHairImage == null || _mainCamera == null) return;
+        if (_mainCamera == null) return;
 
         Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
