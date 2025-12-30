@@ -5,8 +5,11 @@ public class HandDisplayManager : MonoBehaviour
     [Header("Visual Feedback Settings")]
     [SerializeField] private Transform _handDisplayParent;
     [SerializeField] private GameObject[] _foodGuardianDisplayPrefabs;
-    [SerializeField] private Vector3 _displayLocalPosition = new Vector3(0.0f, 0.0f, 0.65f);
-    [SerializeField] private Vector3 _displayLocalRotation = new Vector3(0f, 0f, 0f);
+
+    [Header("Per-Slot Transform Settings")]
+    [SerializeField] private Vector3[] _displayLocalPositions;
+    [SerializeField] private Vector3[] _displayLocalRotations;
+    [SerializeField] private Vector3[] _displayScales;
 
     private GameObject _instantiatedDisplay;
 
@@ -24,10 +27,31 @@ public class HandDisplayManager : MonoBehaviour
         {
             GameObject prefabToDisplay = _foodGuardianDisplayPrefabs[selectedIndex];
 
-            // spawn the selected slot prefab and display it on hand
-            _instantiatedDisplay = Instantiate(prefabToDisplay, _handDisplayParent);
-            _instantiatedDisplay.transform.localPosition = _displayLocalPosition;
-            _instantiatedDisplay.transform.localEulerAngles = _displayLocalRotation;
+            // instanitate without parent first to avoid scale issue
+            _instantiatedDisplay = Instantiate(prefabToDisplay);
+            // then set parent with worldPositionStays = false to use local coordinates
+            _instantiatedDisplay.transform.SetParent(_handDisplayParent, false);
+            // apply position set in inspector (using array)
+            if (_displayLocalPositions != null && selectedIndex < _displayLocalPositions.Length)
+            {
+                _instantiatedDisplay.transform.localPosition = _displayLocalPositions[selectedIndex];
+            }
+
+            // apply rotation set in inspector (using array)
+            if (_displayLocalRotations != null && selectedIndex < _displayLocalRotations.Length)
+            {
+                _instantiatedDisplay.transform.localEulerAngles = _displayLocalRotations[selectedIndex];
+            }
+
+            // apply scale set in inspector (using array)
+            if (_displayScales != null && selectedIndex < _displayScales.Length)
+            {
+                _instantiatedDisplay.transform.localScale = _displayScales[selectedIndex];
+            }
+            else
+            {
+                _instantiatedDisplay.transform.localScale = Vector3.one;
+            }
         }       
     }
 

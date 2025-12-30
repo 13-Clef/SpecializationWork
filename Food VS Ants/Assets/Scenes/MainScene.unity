@@ -597,7 +597,6 @@ GameObject:
   - component: {fileID: 166644669}
   - component: {fileID: 166644668}
   - component: {fileID: 166644667}
-  - component: {fileID: 166644671}
   m_Layer: 5
   m_Name: FoodGuardianCanvas
   m_TagString: Untagged
@@ -688,21 +687,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &166644671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 166644666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 803feed3db09a9f44b2550acf3b392a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cooldownDuration: 5
-  _slotCooldownOverlays: []
-  _slotCooldownTexts: []
 --- !u!1 &172489070
 GameObject:
   m_ObjectHideFlags: 0
@@ -4593,8 +4577,10 @@ MonoBehaviour:
   _cooldownDuration: 5
   _slotCooldownOverlays:
   - {fileID: 214707765}
+  - {fileID: 1954362525}
   _slotCooldownTexts:
   - {fileID: 1964566027}
+  - {fileID: 1934067234}
 --- !u!4 &1161460046
 Transform:
   m_ObjectHideFlags: 0
@@ -7185,9 +7171,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _handDisplayParent: {fileID: 460504278}
   _foodGuardianDisplayPrefabs:
-  - {fileID: 353868038444358645, guid: b4c94f945da66854bb1f8369b71d959a, type: 3}
-  _displayLocalPosition: {x: 0, y: 0, z: 0.65}
-  _displayLocalRotation: {x: 0, y: 0, z: 0}
+  - {fileID: 7078886136696515481, guid: 966940cb2cd415e419866a5ec2ab48eb, type: 3}
+  - {fileID: 2744705430952150237, guid: 3fbc9849f2eb16744a46eb3125fcf181, type: 3}
+  _displayLocalPositions:
+  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 1.2}
+  _displayLocalRotations:
+  - {x: 0, y: 145, z: 0}
+  - {x: 0, y: -20, z: 0}
+  _displayScales:
+  - {x: 0.5, y: 0.5, z: 0.3}
+  - {x: 0.8, y: 1, z: 0.8}
 --- !u!4 &1751433324
 Transform:
   m_ObjectHideFlags: 0
@@ -8196,7 +8190,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -200, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1954362525
