@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AntScript : MonoBehaviour
@@ -21,12 +22,16 @@ public class AntScript : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private float _deathAnimationLength = 3.333f;
 
+    [Header("EXP Drop Settings")]
+    [SerializeField] private int _expDropAmount = 25;
+
     private bool _isAttacking = false;
     private bool _isDead = false;
     private FoodGuardianScript _targetGuardian;
     private float _attackTimer = 0f;
 
-    // animation parameter names (
+    // track all food guardians who damaged this current ant
+    private HashSet<GameObject> _participatingGuardians = new HashSet<GameObject>();
 
     void Start()
     {
@@ -104,7 +109,7 @@ public class AntScript : MonoBehaviour
 
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, GameObject damageSource)
     {
         // do nothing if dead
         if (_isDead)
@@ -114,6 +119,18 @@ public class AntScript : MonoBehaviour
 
         _currentHealth -= damage;
         _currentHealth = Mathf.Max(_currentHealth, 0); // use clamp to 0
+
+        // track which food guardian is damaging this current ant
+        if (damageSource != null)
+        {
+            // find the food guardian that attacked this 
+            FoodGuardianLevelingSystem levelingSystem = damageSource.GetComponent<FoodGuardianLevelingSystem>();
+
+            if (levelingSystem != null && !_participatingGuardians.Contains(damageSource))
+            {
+                _participatingGuardians.Add(damageSource);
+            }
+        } 
 
         // update health bar whenever health changes
         if (_healthBar != null)
@@ -137,6 +154,10 @@ public class AntScript : MonoBehaviour
         }
 
         _isDead = true;
+
+        // give exp to all participating food guardians
+        GiveEXPToParticipants();
+
         // death animation
         _animator.SetTrigger("DeathTrigger");
 
@@ -162,6 +183,30 @@ public class AntScript : MonoBehaviour
 
         // destroy after animation
         Destroy(gameObject, _deathAnimationLength);
+    }
+
+    void GiveEXPToParticipants()
+    {
+        if (_participatingGuardians.Count == 0)
+        {
+            return;
+        }
+
+        // give exp to every food guardian that dealt damage
+        foreach (GameObject guardian in _participatingGuardians)
+        {
+            if (guardian == null) continue; // food guardian might have been destroyed
+
+            FoodGuardianLevelingSystem levelingSystem = guardian.GetComponent<FoodGuardianLevelingSystem>();
+
+            if (levelingSystem != null)
+            {
+                levelingSystem.GainEXP(_expDropAmount);
+            }
+        }
+
+        // clear the list
+        _participatingGuardians.Clear();
     }
 
     void attackFoodGuardian()

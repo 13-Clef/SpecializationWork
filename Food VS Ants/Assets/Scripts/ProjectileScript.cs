@@ -7,6 +7,9 @@ public class ProjectileScript : MonoBehaviour
     [SerializeField] private float _bulletLife = 3f;
     [SerializeField] private int _damage = 10;
 
+    // track which food guardian shot this projectile
+    private GameObject _shooter;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +23,18 @@ public class ProjectileScript : MonoBehaviour
         transform.position += transform.forward * Time.deltaTime * _projectileSpeed;
     }
 
+    // allow food guardian to set custom damage based on level
+    public void SetDamage(int damage)
+    {
+        _damage = damage;
+    }
+
+    // set who shot this projectile
+    public void SetShooter(GameObject shooter)
+    {
+        _shooter = shooter;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ant"))
@@ -28,7 +43,7 @@ public class ProjectileScript : MonoBehaviour
             AntScript ant = other.GetComponent<AntScript>();
             if (ant != null)
             {
-                ant.TakeDamage(_damage);
+                ant.TakeDamage(_damage, _shooter);
                 Destroy(gameObject);
             }
         }

@@ -9,9 +9,10 @@ public class FoodGuardianScript : MonoBehaviour
     [SerializeField] private float _projectileSpawnTimer = 0f;
     [SerializeField] private GameObject _projectilePrefab;
     [SerializeField] private Transform _firePoint;
+    [SerializeField] private int _baseDamage = 10;
 
     [Header("Health Settings")]
-    [SerializeField] private int _maxHealth = 200;
+    [SerializeField] private int _baseMaxHealth = 200;
     [SerializeField] private int _currentHealth;
 
     [Header("Health Bar Settings")]
@@ -21,15 +22,21 @@ public class FoodGuardianScript : MonoBehaviour
     [SerializeField] private bool _canFoodGuardianAttack = false;
     private int _antsInRangeofFoodGuardian = 0;
 
+    // current stats
+    private int _maxHealth;
+    private int _damage;
+
     private void Start()
     {
         // initialize health
-        _currentHealth = _maxHealth;
+        _maxHealth = _baseMaxHealth;
+        _damage = _baseDamage;
+        _currentHealth = _baseMaxHealth;
 
         // set up the health bar
         if (_healthBar != null)
         {
-            _healthBar.SetMaxHealth(_maxHealth);
+            _healthBar.SetMaxHealth(_baseMaxHealth);
         }
     }
 
@@ -58,8 +65,17 @@ public class FoodGuardianScript : MonoBehaviour
 
         if (_projectileSpawnTimer > _foodGuardianAttackRate)
         {
-            // spawn projectile from fire point
-            Instantiate(_projectilePrefab, _firePoint.transform.position, _firePoint.transform.rotation);
+            // spawn projectile from firepoint
+            GameObject projectile = Instantiate(_projectilePrefab, _firePoint.position, _firePoint.rotation);
+
+            // pass damage and shooter info to projectile
+            ProjectileScript projScript = projectile.GetComponent<ProjectileScript>();
+            if (projScript != null)
+            {
+                projScript.SetDamage(_damage);
+                projScript.SetShooter(gameObject);
+            }
+
             _projectileSpawnTimer = 0;
         }
     }
@@ -125,4 +141,41 @@ public class FoodGuardianScript : MonoBehaviour
             }
         }
     }
+
+    // leveling system method
+    public void SetMaxHealth(int newMaxHealth)
+    {
+        int healthDifference = newMaxHealth - _maxHealth;
+        _maxHealth = newMaxHealth;
+
+        // also increase current health by difference
+        _currentHealth += healthDifference;
+
+        // update health bar
+        if (_healthBar  != null)
+        {
+            _healthBar.SetMaxHealth(_maxHealth);
+            _healthBar.SetCurrentHealth(_currentHealth);
+        }
+    }
+
+    public void SetDamage(int newDamage)
+    {
+        _damage = newDamage;
+    }
+
+    public void HealToFull()
+    {
+        _currentHealth = _maxHealth;
+
+        if (_healthBar != null)
+        {
+            _healthBar.SetCurrentHealth(_currentHealth);
+        }
+    }
+
+    // getters
+    public int GetMaxHealth() => _maxHealth;
+    public int GetCurrentHealth() => _currentHealth;
+    public int GetDamage() => _damage;
 }
