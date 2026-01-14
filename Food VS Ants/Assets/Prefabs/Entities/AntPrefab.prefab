@@ -1311,9 +1311,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4992602531043450639}
-  - component: {fileID: 5947328758349041480}
   - component: {fileID: 6653568819913728756}
-  - component: {fileID: -7301195721427486019}
+  - component: {fileID: 4289804975126527868}
+  - component: {fileID: 8428197682291580916}
+  - component: {fileID: 934006953032828789}
+  - component: {fileID: 6815074177326630385}
+  - component: {fileID: 2213245780576661430}
+  - component: {fileID: 5947328758349041480}
   - component: {fileID: 7988891114099948042}
   m_Layer: 7
   m_Name: AntPrefab
@@ -1339,27 +1343,6 @@ Transform:
   - {fileID: 3088662600538562792}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5947328758349041480
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5389377441651523089}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2, y: 3, z: 3}
-  m_Center: {x: 0, y: 1, z: 0.5}
 --- !u!95 &6653568819913728756
 Animator:
   serializedVersion: 5
@@ -1381,7 +1364,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-7301195721427486019
+--- !u!114 &4289804975126527868
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1398,10 +1381,92 @@ MonoBehaviour:
   _maxHealth: 100
   _currentHealth: 0
   _healthBar: {fileID: 792226793044403413}
-  _attackDamage: 5
-  _attackInterval: 4.5
+  _attackDamage: 10
+  _attackInterval: 1
   _animator: {fileID: 6653568819913728756}
   _deathAnimationLength: 3.333
+  _expDropAmount: 25
+--- !u!114 &8428197682291580916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389377441651523089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 546ae5d832c52814d8f71d82b378263e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &934006953032828789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389377441651523089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca29a1de817954a4484fed3a5004b89d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackDamage: 10
+  _attackInterval: 1
+  _animator: {fileID: 6653568819913728756}
+--- !u!114 &6815074177326630385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389377441651523089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bbcc6e3205c7a14a910dcbb002df404, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 100
+  _currentHealth: 0
+  _healthBar: {fileID: 792226793044403413}
+  _animator: {fileID: 6653568819913728756}
+  _deathAnimationLength: 3.333
+  _expDropAmount: 25
+--- !u!114 &2213245780576661430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389377441651523089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9f68c99ac429fc4db704e2f4701cb17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movementSpeed: 2
+  _moveDirection: {x: 0, y: 0, z: -1}
+  _animator: {fileID: 6653568819913728756}
+--- !u!65 &5947328758349041480
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389377441651523089}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 3, z: 3}
+  m_Center: {x: 0, y: 1, z: 0.5}
 --- !u!54 &7988891114099948042
 Rigidbody:
   m_ObjectHideFlags: 0

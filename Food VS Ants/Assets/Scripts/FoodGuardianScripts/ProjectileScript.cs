@@ -40,10 +40,10 @@ public class ProjectileScript : MonoBehaviour
         if (other.gameObject.CompareTag("Ant"))
         {
             // deal damage
-            AntScript ant = other.GetComponent<AntScript>();
-            if (ant != null)
+            AntHealth antHealth = other.GetComponent<AntHealth>();
+            if (antHealth != null)
             {
-                ant.TakeDamage(_damage, _shooter);
+                antHealth.TakeDamage(_damage, _shooter);
                 Destroy(gameObject);
             }
         }

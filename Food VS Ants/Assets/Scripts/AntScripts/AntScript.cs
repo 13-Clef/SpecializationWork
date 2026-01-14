@@ -1,274 +1,37 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AntScript : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    [SerializeField] private float _movementSpeed = 2f;
-    [SerializeField] private Vector3 _moveDirection = Vector3.back; // move in the -Z direction to the food guardians
+    [Header("Components")]
+    [SerializeField] private AntMovement _movement;
+    [SerializeField] private AntHealth _health;
+    [SerializeField] private AntCombat _combat;
 
-    [Header("Health Settings")]
-    [SerializeField] private int _maxHealth = 100;
-    [SerializeField] private int _currentHealth;
-
-    [Header("Health Bar Settings")]
-    [SerializeField] private HealthBar _healthBar;
-
-    [Header("Attack Settings")]
-    [SerializeField] private int _attackDamage = 10;
-    [SerializeField] private float _attackInterval = 1f; // attacks per <?>
-
-    [Header("Animation Settings")]
-    [SerializeField] private Animator _animator;
-    [SerializeField] private float _deathAnimationLength = 3.333f;
-
-    [Header("EXP Drop Settings")]
-    [SerializeField] private int _expDropAmount = 25;
-
-    private bool _isAttacking = false;
-    private bool _isDead = false;
-    private FoodGuardianScript _targetGuardian;
-    private float _attackTimer = 0f;
-
-    // track all food guardians who damaged this current ant
-    private HashSet<GameObject> _participatingGuardians = new HashSet<GameObject>();
+    void Awake()
+    {
+        // get components if not assigned
+        if (_movement == null) _movement = GetComponent<AntMovement>();
+        if (_health == null) _health = GetComponent<AntHealth>();
+        if (_combat == null) _combat = GetComponent<AntCombat>();
+    }
 
     void Start()
     {
-        // set up the animator
-        if (_animator == null)
-        {
-            _animator = GetComponent<Animator>();
-        }
-
-        // set up the health bar
-        if (_healthBar != null)
-        {
-            _healthBar.SetMaxHealth(_maxHealth);
-        }
-
-        // initialize health
-        _currentHealth = _maxHealth;
-
-        // normalize direction to make sure consistent speed with walking animation
-        _moveDirection = _moveDirection.normalized;
-
-        // start walking after spawn
-        if (_animator != null)
-        {
-            _animator.SetBool("WalkBool", true);
-        }
-
+        _movement.StartMoving();
     }
 
     void Update()
     {
-        // do nothing if dead
-        if (_isDead)
+        if (_health.IsDead()) return;
+    
+        if (_combat.IsAttacking())
         {
-            return;
-        }
-
-        // if not attacking then move
-        if (!_isAttacking)
-        {
-            // move in a straight line in the (which is set to -Z direction)
-            transform.position += _moveDirection * _movementSpeed * Time.deltaTime;
-
-            // make sure if ant walking animation is playing
-            if (_animator != null)
-            {
-                _animator.SetBool("WalkBool", true);
-            }
+            _movement.StopMoving();
+            _combat.UpdateAttack();
         }
         else
         {
-            // stop walking to attack
-            if (_animator != null)
-            {
-                _animator.SetBool("WalkBool", false);
-            }
-
-            // food guardian detected, attack
-            if (_targetGuardian != null)
-            {
-                _attackTimer += Time.deltaTime;
-
-                if (_attackTimer >= _attackInterval)
-                {
-                    attackFoodGuardian();
-                    _attackTimer = 0f;
-                }
-            }
-            else
-            {
-                // food guardian has been defeated so continue moving
-                _isAttacking = false;
-            }
-        }
-
-    }
-
-    public void TakeDamage(int damage, GameObject damageSource)
-    {
-        // do nothing if dead
-        if (_isDead)
-        {
-            return;
-        }
-
-        _currentHealth -= damage;
-        _currentHealth = Mathf.Max(_currentHealth, 0); // use clamp to 0
-
-        // track which food guardian is damaging this current ant
-        if (damageSource != null)
-        {
-            // find the food guardian that attacked this 
-            FoodGuardianLevelingSystem levelingSystem = damageSource.GetComponent<FoodGuardianLevelingSystem>();
-
-            if (levelingSystem != null && !_participatingGuardians.Contains(damageSource))
-            {
-                _participatingGuardians.Add(damageSource);
-            }
-        } 
-
-        // update health bar whenever health changes
-        if (_healthBar != null)
-        {
-            _healthBar.SetCurrentHealth(_currentHealth);
-        }
-
-        if (_currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-
-    void Die()
-    {
-        // do nothing if dead
-        if (_isDead)
-        {
-            return;
-        }
-
-        _isDead = true;
-
-        // give exp to all participating food guardians
-        GiveEXPToParticipants();
-
-        // death animation
-        _animator.SetTrigger("DeathTrigger");
-
-        // disable all movement and start dying
-        _isAttacking = true;
-        _targetGuardian = null;
-        _movementSpeed = 0f;
-
-        // stop any current animation
-        if (_animator != null)
-        {
-            _animator.SetBool("WalkBool", false);
-            _animator.ResetTrigger("AttackTrigger");
-            _animator.SetTrigger("DeathTrigger");
-        }
-
-        // disable collider so it doesn't interfere with other ants
-        Collider col = GetComponent<Collider>();
-        if (col != null)
-        {
-            col.enabled = false;
-        }
-
-        // destroy after animation
-        Destroy(gameObject, _deathAnimationLength);
-    }
-
-    void GiveEXPToParticipants()
-    {
-        if (_participatingGuardians.Count == 0)
-        {
-            return;
-        }
-
-        // give exp to every food guardian that dealt damage
-        foreach (GameObject guardian in _participatingGuardians)
-        {
-            if (guardian == null) continue; // food guardian might have been destroyed
-
-            FoodGuardianLevelingSystem levelingSystem = guardian.GetComponent<FoodGuardianLevelingSystem>();
-
-            if (levelingSystem != null)
-            {
-                levelingSystem.GainEXP(_expDropAmount);
-            }
-        }
-
-        // clear the list
-        _participatingGuardians.Clear();
-    }
-
-    void attackFoodGuardian()
-    {
-        if (_targetGuardian != null)
-        {
-            // play the attack animation
-            if (_animator != null)
-            {
-                _animator.SetTrigger("AttackTrigger");
-            }
-
-            // the targeted food guardian takes damage
-            _targetGuardian.TakeDamage(_attackDamage);
-        }
-    }
-
-    // collide with food guardian to do damage
-    void OnTriggerEnter(Collider other)
-    {
-        // do nothing if dead
-        if (_isDead)
-        {
-            return;
-        }
-
-        // check if its hitting a food guardian
-        FoodGuardianScript guardian = other.GetComponent<FoodGuardianScript>();
-
-        // deal damage
-        if (guardian != null && !_isAttacking)
-        {
-            _isAttacking = true;
-            _targetGuardian = guardian;
-            _attackTimer = _attackInterval; // attacks immediately after touching the food guardian
-        }
-
-        // if touches AntDetection, FoodGuardian can attack
-
-        // delete if go out of bound
-        if (other.CompareTag("AntWall"))
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        // do nothing if dead
-        if (_isDead)
-        {
-            return;
-        }
-
-        // if the food guardian is defeated, continue moving
-        FoodGuardianScript guardian = other.GetComponent<FoodGuardianScript>();
-
-        if (guardian != null && guardian == _targetGuardian)
-        {
-            _isAttacking = false;
-            _targetGuardian = null;
-            _attackTimer = 0f;
+            _movement.ContinueMoving();
         }
     }
 }
