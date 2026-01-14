@@ -1849,6 +1849,7 @@ GameObject:
   - component: {fileID: 5735380570766946599}
   - component: {fileID: -8463638283682662040}
   - component: {fileID: -7071883495305065285}
+  - component: {fileID: 336868856020263941}
   - component: {fileID: 1398593051268858648}
   - component: {fileID: -4494719473765437751}
   m_Layer: 8
@@ -1937,6 +1938,40 @@ MonoBehaviour:
   _levelText: {fileID: 4147762423904840618}
   _expText: {fileID: 3777201430573049916}
   _expBar: {fileID: 3977828408020864939}
+--- !u!114 &336868856020263941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7078886136696515481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39f2e1ed21321f1488b24ba42eaa4faf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movesetsAvailable:
+  - movesetName: BorgorTest1
+    elementType: 1
+    projectilePrefab: {fileID: 5959366710827295710, guid: 5f2bff7043972294f9528243b2c9b8e1, type: 3}
+    attackRate: 2
+    baseDamage: 10
+  - movesetName: BorgorTest2
+    elementType: 1
+    projectilePrefab: {fileID: 5959366710827295710, guid: 5f2bff7043972294f9528243b2c9b8e1, type: 3}
+    attackRate: 2
+    baseDamage: 10
+  - movesetName: BorgorTest3
+    elementType: 1
+    projectilePrefab: {fileID: 5959366710827295710, guid: 5f2bff7043972294f9528243b2c9b8e1, type: 3}
+    attackRate: 2
+    baseDamage: 10
+  - movesetName: BorgorTest4
+    elementType: 1
+    projectilePrefab: {fileID: 5959366710827295710, guid: 5f2bff7043972294f9528243b2c9b8e1, type: 3}
+    attackRate: 2
+    baseDamage: 10
+  _currentMovesetIndex: 0
 --- !u!65 &1398593051268858648
 BoxCollider:
   m_ObjectHideFlags: 0
