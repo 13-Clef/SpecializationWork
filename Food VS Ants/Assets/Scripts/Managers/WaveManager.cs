@@ -101,6 +101,12 @@ public class WaveManager : MonoBehaviour
         _waveActive = true;
         _isSpawning = true;
 
+        // hide wave complete panel
+        if (_waveCompletePanel != null)
+        {
+            _waveCompletePanel.SetActive(false);
+        }
+
         // hide start button
         if (_startWaveButton != null)
         {

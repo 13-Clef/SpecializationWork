@@ -24,19 +24,6 @@ public class Moveset
     public GameObject projectilePrefab; // Different projectile for each moveset
     public float attackRate = 1.0f; // Attack speed
     public int baseDamage = 10; // Base damage
-
-
-    //[Header("Special Effects (Optional)")]
-    //public bool hasSlowEffect = false; // Ice moveset slows enemies
-    //public float slowAmount = 0.5f; // 50% slow
-    //public float slowDuration = 2f;
-
-    //public bool hasDOT = false; // Fire moveset burns over time
-    //public int dotDamage = 5;
-    //public float dotDuration = 3f;
-
-    //public bool hasAOE = false; // Ground moveset hits multiple targets
-    //public float aoeRadius = 3f;
 }
 
 public class MovesetSystem : MonoBehaviour
@@ -60,7 +47,7 @@ public class MovesetSystem : MonoBehaviour
         }
     }
 
-    // Change to a different moveset
+    // change to a different moveset
     public void SetMoveset(int movesetIndex)
     {
         if (movesetIndex < 0 || movesetIndex >= _movesetsAvailable.Length) // out of range moveset
@@ -68,18 +55,18 @@ public class MovesetSystem : MonoBehaviour
             return;
         }
 
-        //_currentMovesetIndex = movesetIndex;
-        //_currentMoveset = _movesetsAvailable[movesetIndex];
+        _currentMovesetIndex = movesetIndex;
+        _currentMoveset = _movesetsAvailable[movesetIndex];
 
-        //// Update Food Guardian's stats based on selected moveset
-        //if (_foodGuardianScript != null)
-        //{
-        //    _foodGuardianScript.SetAttackRate(_currentMoveset.attackRate);
-        //    _foodGuardianScript.SetProjectilePrefab(_currentMoveset.projectilePrefab);
-        //    _foodGuardianScript.SetBaseDamage(_currentMoveset.baseDamage);
-        //}
+        // update Food Guardian's stats based on selected moveset
+        if (_foodGuardianScript != null)
+        {
+            _foodGuardianScript.SetAttackRate(_currentMoveset.attackRate);
+            _foodGuardianScript.SetProjectilePrefab(_currentMoveset.projectilePrefab);
+            _foodGuardianScript.SetBaseDamage(_currentMoveset.baseDamage);
+        }
 
-        //Debug.Log($"[{gameObject.name}] Switched to moveset: {_currentMoveset.movesetName} ({_currentMoveset.elementType})");
+        Debug.Log($"[{gameObject.name}] Switched to moveset: {_currentMoveset.movesetName} ({_currentMoveset.elementType})");
     }
 
     // Cycle to next moveset (for testing or UI button)

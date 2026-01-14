@@ -19,6 +19,7 @@ public class PlayerScript : MonoBehaviour
     private InputAction _lookAction;
     private Vector2 _lookInput;
     private float _cameraPitch = 0f;
+    private LayerMask _foodGuardianLayer; // layer mask to ignore ant detection layer
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,9 @@ public class PlayerScript : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _moveAction = _playerInput.actions["Movement"];
         _lookAction = _playerInput.actions["Look"];
+
+        // ignore FoodGuardian Layer/Box collider by using ignore raycast layer
+        _foodGuardianLayer = ~LayerMask.GetMask("FoodGuardian");
 
         // lock and hide cursor when game starts
         Cursor.lockState = CursorLockMode.Locked;

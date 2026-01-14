@@ -15,6 +15,9 @@ public class AntHealth : MonoBehaviour
     [SerializeField] private float _deathAnimationLength = 3.333f;
     [SerializeField] private int _expDropAmount = 25;
 
+    [Header("Element Type")]
+    [SerializeField] private ElementType _antElement = ElementType.Fire;
+
     private bool _isDead = false;
     private HashSet<GameObject> _participatingGuardians = new HashSet<GameObject>();
 
@@ -76,6 +79,9 @@ public class AntHealth : MonoBehaviour
             _animator.SetTrigger("DeathTrigger");
         }
 
+        // notify nearby Food Guardians before disabling collider
+        NotifyNearbyGuardiansOfDeath();
+
         // disable collider
         Collider col = GetComponent<Collider>();
         if (col != null)
@@ -98,6 +104,21 @@ public class AntHealth : MonoBehaviour
 
         // destroy after animation 3.333sec
         Destroy(gameObject, _deathAnimationLength);
+    }
+
+    void NotifyNearbyGuardiansOfDeath()
+    {
+        // find all food guardians that might be targeting this ant
+        Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, 20f);
+
+        foreach (Collider col in nearbyColliders)
+        {
+            FoodGuardianScript guardian = col.GetComponent<FoodGuardianScript>();
+            if (guardian != null)
+            {
+                guardian.OnAntDied(gameObject);
+            }
+        }
     }
 
     void GiveEXPToParticipants()
@@ -129,5 +150,10 @@ public class AntHealth : MonoBehaviour
     public bool IsDead()
     {
         return _isDead;
+    }
+
+    public ElementType GetElement()
+    {
+        return _antElement;
     }
 }

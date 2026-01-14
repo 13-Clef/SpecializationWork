@@ -117,7 +117,8 @@ public class FoodGuardianScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // check if the colliding object is an ant
-        if (other.GetComponent<AntScript>() != null)
+        AntHealth antHealth = other.GetComponent<AntHealth>();
+        if (antHealth != null && !antHealth.IsDead())
         {
             _antsInRangeofFoodGuardian++;
             _canFoodGuardianAttack = true;
@@ -128,7 +129,8 @@ public class FoodGuardianScript : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         // check if the colliding object is an ant
-        if (other.GetComponent<AntScript>() != null)
+        AntHealth antHealth = other.GetComponent<AntHealth>();
+        if (antHealth != null)
         {
             _antsInRangeofFoodGuardian--;
 
@@ -152,7 +154,7 @@ public class FoodGuardianScript : MonoBehaviour
         _currentHealth += healthDifference;
 
         // update health bar
-        if (_healthBar  != null)
+        if (_healthBar != null)
         {
             _healthBar.SetMaxHealth(_maxHealth);
             _healthBar.SetCurrentHealth(_currentHealth);
@@ -171,6 +173,36 @@ public class FoodGuardianScript : MonoBehaviour
         if (_healthBar != null)
         {
             _healthBar.SetCurrentHealth(_currentHealth);
+        }
+    }
+
+    // for moveset system
+    public void SetAttackRate(float newAttackRate)
+    {
+        _foodGuardianAttackRate = newAttackRate;
+    }
+
+    public void SetProjectilePrefab(GameObject newProjectilePrefab)
+    {
+        _projectilePrefab = newProjectilePrefab;
+    }
+
+    public void SetBaseDamage(int newBaseDamage)
+    {
+        _baseDamage = newBaseDamage;
+        _damage = newBaseDamage; // also update current damage
+    }
+
+    public void OnAntDied(GameObject deadAnt)
+    {
+        // Decrement ant count if this dead ant was in our range
+        _antsInRangeofFoodGuardian--;
+
+        if (_antsInRangeofFoodGuardian <= 0)
+        {
+            _antsInRangeofFoodGuardian = 0;
+            _canFoodGuardianAttack = false;
+            _projectileSpawnTimer = 0;
         }
     }
 

@@ -53,4 +53,28 @@ public class ProjectileScript : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    int CalculateElementalDamage(AntHealth ant)
+    {
+        if (_shooter == null)
+        {
+            return _damage;
+        }
+
+        // get moveset system from shooter
+        MovesetSystem movesetSystem = _shooter.GetComponent<MovesetSystem>();
+        if (movesetSystem == null)
+        {
+            return _damage; // No elemental system, return base damage
+        }
+
+        // get damage multiplier based on elements
+        ElementType antElement = ant.GetElement();
+        float multiplier = movesetSystem.GetDamageMultiplier(antElement);
+
+        // calculate final damage
+        int finalDamage = Mathf.RoundToInt(_damage * multiplier);
+
+        return finalDamage;
+    }
 }
