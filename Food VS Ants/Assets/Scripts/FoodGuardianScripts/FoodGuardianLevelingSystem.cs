@@ -22,6 +22,7 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private EXPBar _expBar;
+    private MovesetSystem _movesetSystem;
 
     // references to other scripts
     private FoodGuardianScript _foodGuardianScript;
@@ -35,6 +36,7 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
     void Start()
     {
         _foodGuardianScript = GetComponent<FoodGuardianScript>();
+        _movesetSystem = GetComponent<MovesetSystem>();
 
         // store base stats
         _baseMaxHealth = _foodGuardianScript.GetMaxHealth();
@@ -42,6 +44,12 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
 
         // calculate EXP needed for next level
         _expRequiredForNextLevel = CalculateEXPForLevel(_currentLevel + 1);
+
+        if (_expBar != null)
+        {
+            _expBar.SetEXPRequired(_expRequiredForNextLevel);
+            _expBar.SetCurrentEXP(_currentEXP);
+        }
 
         // update UI
         UpdateLevelUI();
@@ -81,6 +89,9 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
             _expRequiredForNextLevel = CalculateEXPForLevel(_currentLevel + 1);
         }
 
+        // check moveset unlock
+        CheckMovesetUnlock();
+
         // visual feedback
         // ShowLevelUpEffect();
     }
@@ -99,6 +110,26 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
 
         // heal to full when leveling up
         _foodGuardianScript.HealToFull();
+    }
+
+    void CheckMovesetUnlock()
+    {
+        if (_movesetSystem == null)
+        {
+            return;
+        }
+
+        // check which movesets unlock at this level
+        if (_currentLevel == 3)
+        {
+            Debug.Log($"<color=yellow>[{gameObject.name}] NEW MOVE UNLOCKED: Advanced Normal Attack!</color>");
+            // TODO: Show UI notification
+        }
+        else if (_currentLevel == 5)
+        {
+            Debug.Log($"<color=yellow>[{gameObject.name}] NEW MOVE UNLOCKED: Advanced Element Attack!</color>");
+            // TODO: Show UI notification
+        }
     }
 
     int CalculateEXPForLevel(int level)
@@ -149,6 +180,6 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
     public int GetEXPRequiredForNextLevel() => _expRequiredForNextLevel;
     public bool IsMaxLevel() => _currentLevel >= _maxLevel;
     public float GetEXPProgress() => (float)_currentEXP / _expRequiredForNextLevel; 
-    public int GetCurrentLEvel() => _currentLevel;
+    public int GetCurrentLevel() => _currentLevel;
     
 }

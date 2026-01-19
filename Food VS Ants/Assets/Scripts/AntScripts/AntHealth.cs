@@ -123,14 +123,14 @@ public class AntHealth : MonoBehaviour
 
     void GiveEXPToParticipants()
     {
-        if (_participatingGuardians.Count > 0)
+        if (_participatingGuardians.Count == 0)
         {
             return;
         }
 
         foreach (GameObject guardian in _participatingGuardians)
         {
-            if (guardian != null)
+            if (guardian == null)
             {
                 continue;
             }
@@ -154,6 +154,11 @@ public class AntHealth : MonoBehaviour
 
     public ElementType GetElement()
     {
-        return _antElement;
+        AntElement antElement = GetComponent<AntElement>();
+        if (antElement != null)
+        {
+            return antElement.GetElement();
+        }
+        return ElementType.None;
     }
 }

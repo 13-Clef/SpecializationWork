@@ -1423,8 +1423,8 @@ MonoBehaviour:
   _healthBar: {fileID: 792226793044403413}
   _animator: {fileID: 6653568819913728756}
   _deathAnimationLength: 3.333
-  _expDropAmount: 25
-  _antElement: 1
+  _expDropAmount: 100
+  _antElement: 2
 --- !u!114 &2213245780576661430
 MonoBehaviour:
   m_ObjectHideFlags: 0

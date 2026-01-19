@@ -15,6 +15,9 @@ public class CrosshairScript : MonoBehaviour
     [SerializeField] private FoodGuardianManager _foodGuardianManager;
     [SerializeField] private DeploymentCooldownManager _deploymentCooldownManager;
 
+    [Header("Moveset Panel")]
+    [SerializeField] private MovesetUIPanel _movesetUIPanel;
+
     // runtime state variables
     private Camera _mainCamera; // raycast origin
     private GameObject _currentHoverIndicator; // current indicator instance
@@ -38,7 +41,8 @@ public class CrosshairScript : MonoBehaviour
     {
         CheckFoodGuardianSlotSelection();
         CheckMode();
-
+        CheckFoodGuardianSelection();
+            
         if (_isRetrieveMode)
         {
             CheckRetrieve();
@@ -54,6 +58,33 @@ public class CrosshairScript : MonoBehaviour
             {
                 _currentTargetTile = null;
                 HideHoverIndicator();
+            }
+        }
+    }
+
+    void CheckFoodGuardianSelection()
+    {
+        if (_mainCamera == null)
+        {
+            return;
+        }
+
+        // only check when left clicking and not in retrieve mode
+        if (Input.GetMouseButtonDown(0) && !_isRetrieveMode)
+        {
+            Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, _raycastDistance, _antDetectionLayer))
+            {
+                if (hit.collider.CompareTag("FoodGuardian"))
+                {
+                    // opem moveset panel for this selected food guardian
+                    if (_movesetUIPanel != null)
+                    {
+                        _movesetUIPanel.ShowPanel(hit.collider.gameObject);
+                    }
+                }
             }
         }
     }
