@@ -1328,6 +1328,9 @@ PrefabInstance:
       addedObject: {fileID: 869696403227725770}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 02a01f30710d6494d98069b2ebb653ba, type: 3}
       insertIndex: -1
+      addedObject: {fileID: -6219818008748736954}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 02a01f30710d6494d98069b2ebb653ba, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 5284392188701094203}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 02a01f30710d6494d98069b2ebb653ba, type: 3}
       insertIndex: -1
@@ -1359,6 +1362,7 @@ MonoBehaviour:
   _currentHealth: 100
   _healthBar: {fileID: 5869940179131696626}
   _canFoodGuardianAttack: 0
+  _guardianIcon: {fileID: 21300000, guid: 6ab638ae736f7494d8faf3653042cb27, type: 3}
 --- !u!114 &869696403227725770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1381,6 +1385,48 @@ MonoBehaviour:
   _levelText: {fileID: 6673196823191694400}
   _expText: {fileID: 766761762850790357}
   _expBar: {fileID: 7656223069802920982}
+--- !u!114 &-6219818008748736954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2744705430952150237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39f2e1ed21321f1488b24ba42eaa4faf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _guardianElement: 4
+  _basicNormal:
+    movesetName: Basic Attack
+    elementType: 0
+    unlockLevel: 1
+    projectilePrefab: {fileID: 0}
+    attackRate: 1
+    baseDamage: 10
+  _basicElement:
+    movesetName: Earth Attack
+    elementType: 4
+    unlockLevel: 1
+    projectilePrefab: {fileID: 5959366710827295710, guid: 13b9ee02440b9664b83e61ecc5a7a228, type: 3}
+    attackRate: 1
+    baseDamage: 10
+  _advancedNormal:
+    movesetName: Advanced Normal
+    elementType: 0
+    unlockLevel: 3
+    projectilePrefab: {fileID: 5959366710827295710, guid: 9c8b2418c52377149a6a7b0cb916fbd8, type: 3}
+    attackRate: 1
+    baseDamage: 10
+  _advancedElement:
+    movesetName: Advanced Earth
+    elementType: 4
+    unlockLevel: 5
+    projectilePrefab: {fileID: 5959366710827295710, guid: 13b9ee02440b9664b83e61ecc5a7a228, type: 3}
+    attackRate: 1
+    baseDamage: 10
+  _currentMovesetIndex: 0
 --- !u!65 &5284392188701094203
 BoxCollider:
   m_ObjectHideFlags: 0

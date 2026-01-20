@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class MovesetUIPanel : MonoBehaviour
 {
@@ -33,12 +34,24 @@ public class MovesetUIPanel : MonoBehaviour
     [SerializeField] private GameObject _advancedNormalLock;
     [SerializeField] private GameObject _advancedElementLock;
 
+    //[Header("Lock Text (Optional)")]
+    //[SerializeField] private TextMeshProUGUI _advancedNormalLockText;
+    //[SerializeField] private TextMeshProUGUI _advancedElementLockText;
+
     [Header("Close Button")]
     [SerializeField] private Button _closeButton;
+
+    [Header("Guardian Icon")]
+    [SerializeField] private Image _guardianIconImage;
+
+    [Header("Selection Highlight")]
+    [SerializeField] private GameObject _selectionHighlightPrefab;
+    private GameObject _currentHighlight;
 
     private FoodGuardianScript _currentGuardian;
     private MovesetSystem _currentMovesetSystem;
     private FoodGuardianLevelingSystem _currentLevelingSystem;
+    private GameObject _currentGuardianObject;
 
     // Start is called before the first frame update
     void Start()
@@ -84,6 +97,7 @@ public class MovesetUIPanel : MonoBehaviour
         _currentGuardian = foodGuardian.GetComponent<FoodGuardianScript>();
         _currentMovesetSystem = foodGuardian.GetComponent<MovesetSystem>();
         _currentLevelingSystem = foodGuardian.GetComponent<FoodGuardianLevelingSystem>();
+        _currentGuardianObject = foodGuardian;
 
         if (_currentGuardian == null || _currentMovesetSystem == null)
         {
@@ -95,6 +109,12 @@ public class MovesetUIPanel : MonoBehaviour
         {
             _panelObject.SetActive(true);
         }
+
+        // selection highlight
+        CreateSelectionHighlight(foodGuardian);
+
+        // update guardian icon if available
+        UpdateGuardianIcon();
 
         // update all displays
         UpdateStatsDisplay();
@@ -109,9 +129,13 @@ public class MovesetUIPanel : MonoBehaviour
             _panelObject.SetActive(false);
         }
 
+        // destroy selection highlight
+        DestroySelectionHighlight();
+
         _currentGuardian = null;
         _currentMovesetSystem = null;
         _currentLevelingSystem = null;
+        _currentGuardianObject = null;
     }
 
     void SelectMoveset(int movesetIndex)
@@ -220,13 +244,20 @@ public class MovesetUIPanel : MonoBehaviour
 
         // visual feedback for selected button
         ColorBlock colors = button.colors;
-        if (isSelected)
+        if (isSelected && isUnlocked)
         {
-            colors.normalColor = new Color(1f, 1f, 0.5f); // yellowish tint
+            colors.normalColor = new Color(1f, 1f, 0.5f); // yellowish tint for selected
+            colors.highlightedColor = new Color(1f, 1f, 0.6f);
+        }
+        else if (isUnlocked)
+        {
+            colors.normalColor = Color.white;
+            colors.highlightedColor = new Color(0.9f, 0.9f, 0.9f);
         }
         else
         {
-            colors.normalColor = Color.white;
+            colors.normalColor = new Color(0.5f, 0.5f, 0.5f); // gray for locked
+            colors.highlightedColor = new Color(0.5f, 0.5f, 0.5f);
         }
         button.colors = colors;
     }
@@ -240,13 +271,20 @@ public class MovesetUIPanel : MonoBehaviour
 
         if (_currentLevelingSystem.IsMaxLevel())
         {
-            _expBar.SetMaxLevel();
+            if (_expBar != null)
+            {
+                _expBar.SetMaxLevel();
+            }
         }
         else
         {
             int currentEXP = _currentLevelingSystem.GetCurrentEXP();
             int requiredEXP = _currentLevelingSystem.GetEXPRequiredForNextLevel();
-            _expBar.UpdateEXP(currentEXP, requiredEXP);
+
+            if (_expBar != null)
+            {
+                _expBar.UpdateEXP(currentEXP, requiredEXP);
+            }
         }
 
         // update EXP Text
@@ -267,16 +305,79 @@ public class MovesetUIPanel : MonoBehaviour
 
     void Update()
     {
-        // continuously update stats while panel is open
-        if (_panelObject != null && _panelObject.activeSelf && _currentGuardian != null)
+        // check if current guardian still exists
+        if (_panelObject != null && _panelObject.activeSelf)
         {
-            UpdateStatsDisplay();
-            UpdateEXPDisplay();
+            if (_currentGuardianObject == null)
+            {
+                // food guardian was destroyed/retrieved, close panel
+                HidePanel();
+                return;
+            }
+
+            // continuously update stats while panel is open
+            if (_currentGuardian != null)
+            {
+                UpdateStatsDisplay();
+                UpdateEXPDisplay();
+            }
+        }
+    }
+
+    void CreateSelectionHighlight(GameObject guardian)
+    {
+        // destroy old highlight if exists
+        DestroySelectionHighlight();
+
+        if (_selectionHighlightPrefab != null && guardian != null)
+        {
+            // place highlight under food guardian's feet
+            Vector3 _highlightOffset = new Vector3(guardian.transform.position.x, guardian.transform.position.y - 1.2f, guardian.transform.position.z);
+
+            // create highlight at guardian's position
+            _currentHighlight = Instantiate(_selectionHighlightPrefab, _highlightOffset, _selectionHighlightPrefab.transform.rotation);
+
+            // parent it to the guardian so it follows
+            _currentHighlight.transform.SetParent(guardian.transform);
+        }
+    }
+
+    void DestroySelectionHighlight()
+    {
+        if (_currentHighlight != null)
+        {
+            Destroy(_currentHighlight);
+            _currentHighlight = null;
+        }
+    }
+
+    void UpdateGuardianIcon()
+    {
+        if (_guardianIconImage == null || _currentGuardian == null)
+        {
+            return;
+        }
+
+        Sprite icon = _currentGuardian.GetGuardianIcon();
+
+        if (icon != null)
+        {
+            _guardianIconImage.sprite = icon;
+            _guardianIconImage.enabled = true;
+        }
+        else
+        {
+            _guardianIconImage.enabled = false;
         }
     }
 
     public bool IsPanelOpen()
     {
         return _panelObject != null && _panelObject.activeSelf;
+    }
+
+    public bool IsPointerOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
     }
 }

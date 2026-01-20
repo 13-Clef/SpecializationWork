@@ -1,5 +1,6 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 public class FoodGuardianManager : MonoBehaviour
 {
     [Header("Food Guardian Prefabs")]
@@ -12,6 +13,12 @@ public class FoodGuardianManager : MonoBehaviour
     // places a food guardian on the specified tile
     public void PlaceFoodGuardian(GameObject tile, int slotIndex)
     {
+        // check if pointer is over UI, prevent placing if true
+        if (IsPointerOverUI())
+        {
+            return;
+        }
+
         if (slotIndex < 0 || slotIndex >= _foodGuardianPrefabs.Length)
         {
             Debug.LogWarning("invalid slot index!");
@@ -69,6 +76,12 @@ public class FoodGuardianManager : MonoBehaviour
 
         // destroy the tower
         Destroy(foodguardian);
+    }
+
+    // helper method to check if pointer is over UI
+    private bool IsPointerOverUI()
+    {
+        return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
     }
 
     // checks if the player can afford to place a food guardian

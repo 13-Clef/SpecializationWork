@@ -1326,6 +1326,9 @@ PrefabInstance:
       addedObject: {fileID: 5456712211161662340}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 10f3106de1cc8404f8b285e4f0856ae0, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 4582942515826795098}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 10f3106de1cc8404f8b285e4f0856ae0, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 5508765369003975481}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 10f3106de1cc8404f8b285e4f0856ae0, type: 3}
       insertIndex: -1
@@ -1362,6 +1365,7 @@ MonoBehaviour:
   _currentHealth: 100
   _healthBar: {fileID: 1245074659147319972}
   _canFoodGuardianAttack: 0
+  _guardianIcon: {fileID: 21300000, guid: 80209e13debfaaa4aa161672e59ce07d, type: 3}
 --- !u!114 &5456712211161662340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1384,6 +1388,48 @@ MonoBehaviour:
   _levelText: {fileID: 6445792791544842298}
   _expText: {fileID: 6563550866664864784}
   _expBar: {fileID: 2841671383110130165}
+--- !u!114 &4582942515826795098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2921111321607618011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39f2e1ed21321f1488b24ba42eaa4faf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _guardianElement: 5
+  _basicNormal:
+    movesetName: Basic Attack
+    elementType: 0
+    unlockLevel: 1
+    projectilePrefab: {fileID: 5959366710827295710, guid: 9c8b2418c52377149a6a7b0cb916fbd8, type: 3}
+    attackRate: 1
+    baseDamage: 10
+  _basicElement:
+    movesetName: Grass Attack
+    elementType: 5
+    unlockLevel: 1
+    projectilePrefab: {fileID: 5959366710827295710, guid: 64aa5c4669e49ea40b765712f89ecc2f, type: 3}
+    attackRate: 1
+    baseDamage: 10
+  _advancedNormal:
+    movesetName: Advanced Attack
+    elementType: 0
+    unlockLevel: 3
+    projectilePrefab: {fileID: 5959366710827295710, guid: 9c8b2418c52377149a6a7b0cb916fbd8, type: 3}
+    attackRate: 1
+    baseDamage: 10
+  _advancedElement:
+    movesetName: Advanced Grass
+    elementType: 5
+    unlockLevel: 5
+    projectilePrefab: {fileID: 5959366710827295710, guid: 64aa5c4669e49ea40b765712f89ecc2f, type: 3}
+    attackRate: 1
+    baseDamage: 10
+  _currentMovesetIndex: 0
 --- !u!65 &5508765369003975481
 BoxCollider:
   m_ObjectHideFlags: 0

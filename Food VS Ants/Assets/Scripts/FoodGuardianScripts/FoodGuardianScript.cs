@@ -22,6 +22,9 @@ public class FoodGuardianScript : MonoBehaviour
     [SerializeField] private bool _canFoodGuardianAttack = false;
     private int _antsInRangeofFoodGuardian = 0;
 
+    [Header("UI Display")]
+    [SerializeField] private Sprite _guardianIcon;
+
     // current stats
     private int _maxHealth;
     private int _damage;
@@ -204,6 +207,12 @@ public class FoodGuardianScript : MonoBehaviour
             _canFoodGuardianAttack = false;
             _projectileSpawnTimer = 0;
         }
+    }
+
+    // guardian icon
+    public Sprite GetGuardianIcon()
+    {
+        return _guardianIcon;
     }
 
     // getters

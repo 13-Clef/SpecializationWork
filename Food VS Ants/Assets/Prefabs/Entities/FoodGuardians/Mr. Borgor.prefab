@@ -2441,6 +2441,7 @@ MonoBehaviour:
   _currentHealth: 100
   _healthBar: {fileID: 3807677038657961320}
   _canFoodGuardianAttack: 0
+  _guardianIcon: {fileID: 21300000, guid: 791ccee12a4bd2647ba97dcf6844e907, type: 3}
 --- !u!114 &-7071883495305065285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2482,14 +2483,14 @@ MonoBehaviour:
     unlockLevel: 1
     projectilePrefab: {fileID: 5959366710827295710, guid: 9c8b2418c52377149a6a7b0cb916fbd8, type: 3}
     attackRate: 1
-    baseDamage: 10
+    baseDamage: 1
   _basicElement:
     movesetName: Basic Element
     elementType: 1
     unlockLevel: 1
     projectilePrefab: {fileID: 5959366710827295710, guid: 5f2bff7043972294f9528243b2c9b8e1, type: 3}
     attackRate: 1
-    baseDamage: 10
+    baseDamage: 1
   _advancedNormal:
     movesetName: Advanced Attack
     elementType: 0
