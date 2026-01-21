@@ -413,8 +413,5 @@ public class MovesetUIPanel : MonoBehaviour
         return EventSystem.current.IsPointerOverGameObject();
     }
 
-    public GameObject GetCurrentGuardian()
-    {
-        return _currentGuardianObject;
-    }
+
 }

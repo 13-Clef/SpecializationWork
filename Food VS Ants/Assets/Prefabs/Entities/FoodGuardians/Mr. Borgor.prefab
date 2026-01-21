@@ -2433,10 +2433,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _foodGuardianAttackRate: 1
-  _projectileSpawnTimer: 0
   _projectilePrefab: {fileID: 3079824582360814655, guid: 2473bf9bb03329f4da19abb1097f20aa, type: 3}
-  _firePoint: {fileID: 4358009316037139027}
   _baseDamage: 10
+  _projectileSpawnTimer: 0
+  _firePoint: {fileID: 4358009316037139027}
   _baseMaxHealth: 200
   _currentHealth: 100
   _healthBar: {fileID: 3807677038657961320}
@@ -2485,12 +2485,12 @@ MonoBehaviour:
     attackRate: 1
     baseDamage: 1
   _basicElement:
-    movesetName: Basic Element
+    movesetName: Grease Fire
     elementType: 1
     unlockLevel: 1
-    projectilePrefab: {fileID: 5959366710827295710, guid: 5f2bff7043972294f9528243b2c9b8e1, type: 3}
+    projectilePrefab: {fileID: 6901670160653438195, guid: 14eac531d054c7d439224cbbf81cb4cd, type: 3}
     attackRate: 1
-    baseDamage: 1
+    baseDamage: 20
   _advancedNormal:
     movesetName: Advanced Attack
     elementType: 0
@@ -2502,7 +2502,7 @@ MonoBehaviour:
     movesetName: Advanced Element
     elementType: 1
     unlockLevel: 5
-    projectilePrefab: {fileID: 5959366710827295710, guid: 5f2bff7043972294f9528243b2c9b8e1, type: 3}
+    projectilePrefab: {fileID: 6901670160653438195, guid: 14eac531d054c7d439224cbbf81cb4cd, type: 3}
     attackRate: 1
     baseDamage: 30
   _currentMovesetIndex: 0
