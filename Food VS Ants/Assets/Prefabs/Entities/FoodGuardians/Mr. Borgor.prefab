@@ -2562,7 +2562,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7078886136696515481}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 7321545b2cbd4c8428dd19514c564427, type: 2}
   m_CullingMode: 0
@@ -2916,7 +2916,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6008778871574066353}
-  - component: {fileID: 3171137699975658929}
   m_Layer: 0
   m_Name: LeftHandPivot
   m_TagString: Untagged
@@ -2940,27 +2939,6 @@ Transform:
   - {fileID: 7839244772629667128}
   m_Father: {fileID: 5735380570766946599}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &3171137699975658929
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8857310172046951322}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5d8cedb7a6a536e4091f21a9a864be1f, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8952486047475456529
 GameObject:
   m_ObjectHideFlags: 0

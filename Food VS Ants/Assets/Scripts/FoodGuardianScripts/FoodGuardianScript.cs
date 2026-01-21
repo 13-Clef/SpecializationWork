@@ -3,13 +3,13 @@ using UnityEngine;
 public class FoodGuardianScript : MonoBehaviour
 {
     [Header("Attack Settings")]
-    public float _foodGuardianAttackRate = 1.0f;
+    [HideInInspector] public float _foodGuardianAttackRate = 1.0f;
+    [HideInInspector] public GameObject _projectilePrefab;
+    [HideInInspector] public int _baseDamage = 10;
 
     [Header("Projectile Settings")]
     [SerializeField] private float _projectileSpawnTimer = 0f;
-    public GameObject _projectilePrefab;
     [SerializeField] private Transform _firePoint;
-    public int _baseDamage = 10;
 
     [Header("Health Settings")]
     [SerializeField] private int _baseMaxHealth = 200;

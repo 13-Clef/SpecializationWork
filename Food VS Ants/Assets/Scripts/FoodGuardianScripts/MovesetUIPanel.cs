@@ -10,9 +10,12 @@ public class MovesetUIPanel : MonoBehaviour
 
     [Header("Stat Display")]
     [SerializeField] private TextMeshProUGUI _damageText;
-    [SerializeField] private TextMeshProUGUI _healthText;
     [SerializeField] private TextMeshProUGUI _attackRateText;
     [SerializeField] private TextMeshProUGUI _levelText;
+
+    [Header("HP Bar")]
+    [SerializeField] private HealthBar _healthBar;
+    [SerializeField] private TextMeshProUGUI _healthText;
 
     [Header("EXP Bar")]
     [SerializeField] private EXPBar _expBar;
@@ -33,10 +36,6 @@ public class MovesetUIPanel : MonoBehaviour
     [Header("Lock Overlays (For Advanceds)")]
     [SerializeField] private GameObject _advancedNormalLock;
     [SerializeField] private GameObject _advancedElementLock;
-
-    //[Header("Lock Text (Optional)")]
-    //[SerializeField] private TextMeshProUGUI _advancedNormalLockText;
-    //[SerializeField] private TextMeshProUGUI _advancedElementLockText;
 
     [Header("Close Button")]
     [SerializeField] private Button _closeButton;
@@ -119,6 +118,7 @@ public class MovesetUIPanel : MonoBehaviour
         // update all displays
         UpdateStatsDisplay();
         UpdateMovesetButtons();
+        UpdateHPDisplay();
         UpdateEXPDisplay();
     }
 
@@ -303,6 +303,21 @@ public class MovesetUIPanel : MonoBehaviour
         }
     }
 
+    void UpdateHPDisplay()
+    {
+        if (_currentGuardian == null || _healthBar == null)
+        {
+            return;
+        }
+
+        int currentHealth = _currentGuardian.GetCurrentHealth();
+        int maxHealth = _currentGuardian.GetMaxHealth();
+
+        // set max health and update current health
+        _healthBar.SetMaxHealth(maxHealth);
+        _healthBar.SetCurrentHealth(currentHealth);
+    }
+
     void Update()
     {
         // check if current guardian still exists
@@ -319,6 +334,7 @@ public class MovesetUIPanel : MonoBehaviour
             if (_currentGuardian != null)
             {
                 UpdateStatsDisplay();
+                UpdateHPDisplay();
                 UpdateEXPDisplay();
             }
         }
@@ -331,14 +347,30 @@ public class MovesetUIPanel : MonoBehaviour
 
         if (_selectionHighlightPrefab != null && guardian != null)
         {
-            // place highlight under food guardian's feet
-            Vector3 _highlightOffset = new Vector3(guardian.transform.position.x, guardian.transform.position.y - 1.2f, guardian.transform.position.z);
+            Vector3 highlightPosition;
 
-            // create highlight at guardian's position
-            _currentHighlight = Instantiate(_selectionHighlightPrefab, _highlightOffset, _selectionHighlightPrefab.transform.rotation);
+            // raycast down to find ground position
+            RaycastHit hit;
+            if (Physics.Raycast(guardian.transform.position, Vector3.down, out hit, 10f))
+            {
+                // place highlight slightly above the ground
+                highlightPosition = hit.point + Vector3.up * 0.2f;
+            }
+            else
+            {
+                // fallback: use guardian's position with small offset
+                highlightPosition = guardian.transform.position;
+                highlightPosition.y = 0.2f;
+            }
+
+            // create highlight at calculated position
+            _currentHighlight = Instantiate(_selectionHighlightPrefab, highlightPosition, Quaternion.Euler(90f, 0f, 0f));
 
             // parent it to the guardian so it follows
             _currentHighlight.transform.SetParent(guardian.transform);
+
+            //// keep the world scale (don't inherit guardian's scale)
+            //_currentHighlight.transform.localScale = Vector3.one;
         }
     }
 
@@ -379,5 +411,10 @@ public class MovesetUIPanel : MonoBehaviour
     public bool IsPointerOverUI()
     {
         return EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public GameObject GetCurrentGuardian()
+    {
+        return _currentGuardianObject;
     }
 }

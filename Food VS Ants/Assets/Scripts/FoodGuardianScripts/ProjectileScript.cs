@@ -7,7 +7,7 @@ public class ProjectileScript : MonoBehaviour
     [SerializeField] private float _bulletLife = 3f;
     [SerializeField] private int _damage = 10;
 
-    // track which food guardian shot this projectile
+    //track which food guardian shot this projectile
     private GameObject _shooter;
 
     // Start is called before the first frame update
