@@ -15,9 +15,6 @@ public class AntHealth : MonoBehaviour
     [SerializeField] private float _deathAnimationLength = 3.333f;
     [SerializeField] private int _expDropAmount = 25;
 
-    [Header("Element Type")]
-    [SerializeField] private ElementType _antElement = ElementType.Fire;
-
     private bool _isDead = false;
     private HashSet<GameObject> _participatingGuardians = new HashSet<GameObject>();
 
@@ -157,7 +154,7 @@ public class AntHealth : MonoBehaviour
         AntElement antElement = GetComponent<AntElement>();
         if (antElement != null)
         {
-            return antElement.GetElement();
+            return antElement.GetElementType();
         }
         return ElementType.None;
     }

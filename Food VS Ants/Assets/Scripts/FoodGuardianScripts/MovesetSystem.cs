@@ -145,7 +145,7 @@ public class MovesetSystem : MonoBehaviour
 
         if (IsStrongAgainst(attackElement, targetElement))
         {
-            return 2.0f; // 2x damage (super effective)
+            return 1.5f; // 1.5x damage (super effective)
         }
         else if (IsWeakAgainst(attackElement, targetElement))
         {

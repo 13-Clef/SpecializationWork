@@ -14,7 +14,6 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
 
     [Header("Stat Scaling Per Level")]
     [SerializeField] private int _healthIncreasePerLevel = 50;
-    [SerializeField] private int _damageIncreasePerLevel = 5;
 
     [Header("UI Display Settings")]
     [SerializeField] private TextMeshProUGUI _levelText;
@@ -30,7 +29,6 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
 
     // base stats (stored at start)
     private int _baseMaxHealth;
-    private int _baseDamage;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +38,6 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
 
         // store base stats
         _baseMaxHealth = _foodGuardianScript.GetMaxHealth();
-        _baseDamage = _foodGuardianScript.GetDamage();
 
         // calculate EXP needed for next level
         _expRequiredForNextLevel = CalculateEXPForLevel(_currentLevel + 1);
@@ -101,12 +98,8 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
         // calculate new max health based on current level
         int newMaxHealth = _baseMaxHealth + (_healthIncreasePerLevel * (_currentLevel - 1));
 
-        // calculate new damage too
-        int newDamage = _baseDamage + (_damageIncreasePerLevel * (_currentLevel - 1));
-
         // apply new stats afterwards
         _foodGuardianScript.SetMaxHealth(newMaxHealth);
-        _foodGuardianScript.SetDamage(newDamage);
 
         // heal to full when leveling up
         _foodGuardianScript.HealToFull();
@@ -175,7 +168,6 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
 
     }
 
-    // public getters public int GetCurrentLevel() => _currentLevel;
     public int GetCurrentEXP() => _currentEXP;
     public int GetEXPRequiredForNextLevel() => _expRequiredForNextLevel;
     public bool IsMaxLevel() => _currentLevel >= _maxLevel;

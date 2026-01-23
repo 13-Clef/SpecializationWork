@@ -1,11 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class FoodGuardianScript : MonoBehaviour
 {
     [Header("Attack Settings")]
     [HideInInspector] public float _foodGuardianAttackRate = 1.0f;
     [HideInInspector] public GameObject _projectilePrefab;
-    [HideInInspector] public int _baseDamage = 10;
+    [HideInInspector] public int _damage = 10;
 
     [Header("Projectile Settings")]
     [SerializeField] private float _projectileSpawnTimer = 0f;
@@ -20,20 +21,20 @@ public class FoodGuardianScript : MonoBehaviour
 
     [Header("Detection Settings")]
     [SerializeField] private bool _canFoodGuardianAttack = false;
-    private int _antsInRangeofFoodGuardian = 0;
+
+    // track ants in range using a HashSet to prevent duplicates
+    private HashSet<GameObject> _antsInRange = new HashSet<GameObject>();
 
     [Header("UI Display")]
     [SerializeField] private Sprite _guardianIcon;
 
     // current stats
     private int _maxHealth;
-    private int _damage;
 
     private void Start()
     {
         // initialize health
         _maxHealth = _baseMaxHealth;
-        _damage = _baseDamage;
         _currentHealth = _baseMaxHealth;
 
         // set up the health bar
@@ -45,7 +46,13 @@ public class FoodGuardianScript : MonoBehaviour
 
     void Update()
     {
-        // only attack if ants are being detected in the RowDetectors
+        // clean up any null references (destroyed ants)
+        _antsInRange.RemoveWhere(ant => ant == null);
+
+        // Update attack state based on actual ant count
+        _canFoodGuardianAttack = _antsInRange.Count > 0;
+
+        // only attack if ants are being detected
         if (_canFoodGuardianAttack)
         {
             FoodGuardianAttacksAnt();
@@ -55,7 +62,6 @@ public class FoodGuardianScript : MonoBehaviour
     // food guardian attacking
     void FoodGuardianAttacksAnt()
     {
-
         // check if projectile prefab and firepoint is assigned
         if (_projectilePrefab == null || _firePoint == null)
         {
@@ -123,8 +129,13 @@ public class FoodGuardianScript : MonoBehaviour
         AntHealth antHealth = other.GetComponent<AntHealth>();
         if (antHealth != null && !antHealth.IsDead())
         {
-            _antsInRangeofFoodGuardian++;
-            _canFoodGuardianAttack = true;
+            // Add to HashSet (automatically prevents duplicates)
+            bool added = _antsInRange.Add(other.gameObject);
+
+            if (added)
+            {
+                Debug.Log($"[{gameObject.name}] Ant entered range. Count: {_antsInRange.Count}");
+            }
         }
     }
 
@@ -135,14 +146,20 @@ public class FoodGuardianScript : MonoBehaviour
         AntHealth antHealth = other.GetComponent<AntHealth>();
         if (antHealth != null)
         {
-            _antsInRangeofFoodGuardian--;
+            // Remove from HashSet regardless of dead/alive state
+            bool removed = _antsInRange.Remove(other.gameObject);
 
-            // stop attacking if no ants remain in the DetectionZone (range)
-            if (_antsInRangeofFoodGuardian <= 0)
+            if (removed)
             {
-                _antsInRangeofFoodGuardian = 0; // prevent negative values
+                Debug.Log($"[{gameObject.name}] Ant left range. Count: {_antsInRange.Count}");
+            }
+
+            // Update attack state
+            if (_antsInRange.Count == 0)
+            {
                 _canFoodGuardianAttack = false;
-                _projectileSpawnTimer = 0; // reset timer when no ants detected
+                _projectileSpawnTimer = 0;
+                Debug.Log($"[{gameObject.name}] No more ants in range. Stopped attacking.");
             }
         }
     }
@@ -162,11 +179,6 @@ public class FoodGuardianScript : MonoBehaviour
             _healthBar.SetMaxHealth(_maxHealth);
             _healthBar.SetCurrentHealth(_currentHealth);
         }
-    }
-
-    public void SetDamage(int newDamage)
-    {
-        _damage = newDamage;
     }
 
     public void HealToFull()
@@ -190,22 +202,27 @@ public class FoodGuardianScript : MonoBehaviour
         _projectilePrefab = newProjectilePrefab;
     }
 
+    // moveset system sets base damage (but leveling system controls final damage)
     public void SetBaseDamage(int newBaseDamage)
     {
-        _baseDamage = newBaseDamage;
-        _damage = newBaseDamage; // also update current damage
+        _damage = newBaseDamage;
     }
 
     public void OnAntDied(GameObject deadAnt)
     {
-        // Decrement ant count if this dead ant was in our range
-        _antsInRangeofFoodGuardian--;
+        // Remove the dead ant from our tracking
+        bool removed = _antsInRange.Remove(deadAnt);
 
-        if (_antsInRangeofFoodGuardian <= 0)
+        if (removed)
         {
-            _antsInRangeofFoodGuardian = 0;
+            Debug.Log($"[{gameObject.name}] Ant died and removed. Count: {_antsInRange.Count}");
+        }
+
+        if (_antsInRange.Count == 0)
+        {
             _canFoodGuardianAttack = false;
             _projectileSpawnTimer = 0;
+            Debug.Log($"[{gameObject.name}] No more ants after death. Stopped attacking.");
         }
     }
 
@@ -219,4 +236,5 @@ public class FoodGuardianScript : MonoBehaviour
     public int GetMaxHealth() => _maxHealth;
     public int GetCurrentHealth() => _currentHealth;
     public int GetDamage() => _damage;
+    public int GetAntsInRangeCount() => _antsInRange.Count; // For debugging
 }

@@ -1319,6 +1319,7 @@ GameObject:
   - component: {fileID: 2213245780576661430}
   - component: {fileID: 5947328758349041480}
   - component: {fileID: 7988891114099948042}
+  - component: {fileID: 5107549668791114664}
   m_Layer: 7
   m_Name: GrassAntPrefab
   m_TagString: Ant
@@ -1488,6 +1489,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 118
   m_CollisionDetection: 0
+--- !u!114 &5107549668791114664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389377441651523089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5590ef018138cf4e8ebe5cd34743e9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _elementType: 5
 --- !u!1 &5531131153200876565
 GameObject:
   m_ObjectHideFlags: 0

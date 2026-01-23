@@ -123,9 +123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f668f1d4ab858894b81b347494191205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectileSpeed: 10
-  _bulletLife: 3
-  _damage: 10
+  _speed: 10
+  _damageNumberPrefab: {fileID: 7655466161291200840, guid: f827125f5bb8c314e9b895085e6fbcb3, type: 3}
 --- !u!135 &6541865480706474374
 SphereCollider:
   m_ObjectHideFlags: 0

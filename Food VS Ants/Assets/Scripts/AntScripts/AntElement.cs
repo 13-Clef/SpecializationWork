@@ -3,15 +3,14 @@ using UnityEngine;
 public class AntElement : MonoBehaviour
 {
     [Header("Ant Element Type")]
-    [SerializeField] private ElementType _antElement = ElementType.Fire;
-
-    public ElementType GetElement()
+    [SerializeField] private ElementType _elementType = ElementType.None;
+    public ElementType GetElementType()
     {
-        return _antElement;
+        return _elementType;
     }
 
-    public void SetElement(ElementType element)
+    public void SetElement(ElementType newType)
     {
-        _antElement = element;
+        _elementType = newType;
     }
 }

@@ -169,14 +169,6 @@ public class MovesetUIPanel : MonoBehaviour
             _damageText.text = $"{damage} DMG";
         }
 
-        // update health
-        if (_healthText != null)
-        {
-            int currentHealth = _currentGuardian.GetCurrentHealth();
-            int maxHealth = _currentGuardian.GetMaxHealth();
-            _healthText.text = $"{currentHealth}/{maxHealth} HP";
-        }
-
         // update attack rate
         if (_attackRateText != null)
         {
