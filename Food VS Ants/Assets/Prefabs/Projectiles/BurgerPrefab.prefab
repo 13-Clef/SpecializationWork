@@ -124,6 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
+  _maxLifetime: 5
   _damageNumberPrefab: {fileID: 7655466161291200840, guid: f827125f5bb8c314e9b895085e6fbcb3, type: 3}
 --- !u!135 &6541865480706474374
 SphereCollider:
@@ -165,7 +166,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 768
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0

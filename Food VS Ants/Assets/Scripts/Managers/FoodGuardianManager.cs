@@ -1,6 +1,6 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 public class FoodGuardianManager : MonoBehaviour
 {
     [Header("Food Guardian Prefabs")]
@@ -45,7 +45,7 @@ public class FoodGuardianManager : MonoBehaviour
         // instantiate the tower
         GameObject foodGuardian = Instantiate(prefabToPlace, spawnPosition, prefabToPlace.transform.rotation);
         foodGuardian.tag = "FoodGuardian";
-
+        
         // mark tile as occupied after placing
         tile.tag = "Occupied";
     }
@@ -57,6 +57,8 @@ public class FoodGuardianManager : MonoBehaviour
         {
             return;
         }
+
+        Debug.Log($"Retrieving: {foodguardian.name} at ({foodguardian.transform.position.x}, {foodguardian.transform.position.y}, {foodguardian.transform.position.z})");
 
         // refund 50% of the placement cost
         if (CrumbsManager.Instance != null)

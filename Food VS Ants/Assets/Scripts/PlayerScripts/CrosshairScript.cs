@@ -18,22 +18,17 @@ public class CrosshairScript : MonoBehaviour
     [Header("Moveset Panel")]
     [SerializeField] private MovesetUIPanel _movesetUIPanel;
 
-    // runtime state variables
-    private Camera _mainCamera; // raycast origin
-    private GameObject _currentHoverIndicator; // current indicator instance
-    private GameObject _currentTargetTile; // tile to place on
-    private bool _isRetrieveMode = false; // toggle between place/retrieve
-    private int _selectedSlotIndex = 0; // start at slot 1
-    private LayerMask _antDetectionLayer; // layer mask to ignore ant detection layer
+    private Camera _mainCamera;
+    private GameObject _currentHoverIndicator;
+    private GameObject _currentTargetTile;
+    private bool _isRetrieveMode = false;
+    private int _selectedSlotIndex = 0;
+    private LayerMask _antDetectionLayer;
 
     void Start()
     {
         _mainCamera = Camera.main;
-
-        // ignore AntDetection Box collider by using ignore raycast layer
         _antDetectionLayer = ~LayerMask.GetMask("AntDetection");
-
-        // display slot 1
         UpdateHandDisplay(0);
     }
 
@@ -42,7 +37,7 @@ public class CrosshairScript : MonoBehaviour
         CheckFoodGuardianSlotSelection();
         CheckMode();
         CheckFoodGuardianSelection();
-            
+
         if (_isRetrieveMode)
         {
             CheckRetrieve();
@@ -64,12 +59,8 @@ public class CrosshairScript : MonoBehaviour
 
     void CheckFoodGuardianSelection()
     {
-        if (_mainCamera == null)
-        {
-            return;
-        }
+        if (_mainCamera == null) return;
 
-        // only check when left clicking and not in retrieve mode
         if (Input.GetMouseButtonDown(0) && !_isRetrieveMode)
         {
             Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -77,13 +68,11 @@ public class CrosshairScript : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, _raycastDistance, _antDetectionLayer))
             {
-                if (hit.collider.CompareTag("FoodGuardian"))
+                FoodGuardianScript guardianScript = hit.collider.GetComponentInParent<FoodGuardianScript>();
+
+                if (guardianScript != null && _movesetUIPanel != null)
                 {
-                    // opem moveset panel for this selected food guardian
-                    if (_movesetUIPanel != null)
-                    {
-                        _movesetUIPanel.ShowPanel(hit.collider.gameObject);
-                    }
+                    _movesetUIPanel.ShowPanel(guardianScript.gameObject);
                 }
             }
         }
@@ -91,68 +80,40 @@ public class CrosshairScript : MonoBehaviour
 
     void CheckFoodGuardianSlotSelection()
     {
-        for (int i = 0; i < 5; i++) // slot 1-5 (keys 1-5)
+        for (int i = 0; i < 5; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
-                int newIndex = i; // slot index coreresponding to key pressed
+                int newIndex = i;
 
-                // pressing the same slot again deselects it
                 if (_selectedSlotIndex == newIndex)
                 {
-                    // deselect by using slot 6 (which is empty)
-                    _selectedSlotIndex = 5;
-                    UpdateHandDisplay(5);
+                    DeselectSlot();
                 }
                 else
                 {
-                    // check if slot has a valid guardian prefab, whether player can afford it and it is NOT on cooldown
                     if (_foodGuardianManager != null && _foodGuardianManager.IsSlotValid(newIndex))
                     {
-                        // check if food guardian is on cooldown
-                        bool isReadyForPlacement = _deploymentCooldownManager == null || _deploymentCooldownManager.IsSlotReadyForPlacement(newIndex);
-
-                        // and player can afford the food guardian
-                        if (isReadyForPlacement && _foodGuardianManager.CanAffordPlacement())
+                        if (IsSlotReady(newIndex) && _foodGuardianManager.CanAffordPlacement())
                         {
                             _selectedSlotIndex = newIndex;
-                            _isRetrieveMode = false; // switch back to placement mode
+                            _isRetrieveMode = false;
                             UpdateHandDisplay(_selectedSlotIndex);
                         }
-                        // if player have no crumbs, use slot 6 to act as insufficient crumbs
                         else
                         {
-                            //int currentCrumbs = CrumbsManager.Instance != null ? CrumbsManager.Instance.GetCurrentCrumbs() : 0;
-                            _selectedSlotIndex = 5;
-                            UpdateHandDisplay(5);
+                            DeselectSlot();
                         }
                     }
-                    // current slot is empty so use slot 6 which is an empty slot
                     else
                     {
-                        _selectedSlotIndex = 5;
-                        UpdateHandDisplay(5);
+                        DeselectSlot();
                     }
                 }
 
-                // clear hover indicator since slot selection has changed
-                HideHoverIndicator();
-                if (_currentHoverIndicator != null)
-                {
-                    Destroy(_currentHoverIndicator);
-                    _currentHoverIndicator = null;
-                }
-
+                ClearHoverIndicator();
                 return;
             }
-        }
-    }
-
-    void UpdateHandDisplay(int selectedIndex)
-    {
-        if (_handDisplayManager != null)
-        {
-            _handDisplayManager.UpdateHandDisplay(selectedIndex);
         }
     }
 
@@ -160,26 +121,7 @@ public class CrosshairScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            // toggle mode (placement/retrieval)
-            _isRetrieveMode = !_isRetrieveMode;
-
-            // retrieve mode = no hand display, placement mode = current slot hand display
-            if (_isRetrieveMode)
-            {
-                UpdateHandDisplay(5); // no hand display
-            }
-            else
-            {
-                UpdateHandDisplay(_selectedSlotIndex); // current slot hand display
-            }
-
-            HideHoverIndicator();
-
-            if (_currentHoverIndicator != null)
-            {
-                Destroy(_currentHoverIndicator);
-                _currentHoverIndicator = null;
-            }
+            ToggleRetrieveMode();
         }
     }
 
@@ -219,16 +161,16 @@ public class CrosshairScript : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, _raycastDistance, _antDetectionLayer))
         {
-            if (hit.collider.CompareTag("FoodGuardian"))
-            {
-                ShowHoverIndicator(hit.collider.gameObject, true);
+            FoodGuardianScript guardianScript = hit.collider.GetComponentInParent<FoodGuardianScript>();
 
-                if (Input.GetMouseButtonDown(0))
+            if (guardianScript != null)
+            {
+                GameObject foodGuardian = guardianScript.gameObject;
+                ShowHoverIndicator(foodGuardian, true);
+
+                if (Input.GetMouseButtonDown(0) && _foodGuardianManager != null)
                 {
-                    if (_foodGuardianManager != null)
-                    {
-                        _foodGuardianManager.RetrieveFoodGuardian(hit.collider.gameObject);
-                    }
+                    _foodGuardianManager.RetrieveFoodGuardian(foodGuardian);
                 }
             }
             else
@@ -244,23 +186,15 @@ public class CrosshairScript : MonoBehaviour
 
     void HandlePlacement()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && _currentTargetTile != null && _foodGuardianManager != null)
         {
-            if (_currentTargetTile != null && _foodGuardianManager != null)
+            if (IsSlotReady(_selectedSlotIndex) && _foodGuardianManager.CanAffordPlacement())
             {
-                // check if slot is ready (not on cooldown)
-                bool isReadyForPlacement = _deploymentCooldownManager == null || _deploymentCooldownManager.IsSlotReadyForPlacement(_selectedSlotIndex);
+                _foodGuardianManager.PlaceFoodGuardian(_currentTargetTile, _selectedSlotIndex);
 
-                if (isReadyForPlacement && _foodGuardianManager.CanAffordPlacement())
+                if (_deploymentCooldownManager != null)
                 {
-                    // place the current food guardian
-                    _foodGuardianManager.PlaceFoodGuardian(_currentTargetTile, _selectedSlotIndex);
-
-                    // then start cooldown for the current food guardian
-                    if (_deploymentCooldownManager != null)
-                    {
-                        _deploymentCooldownManager.StartCooldown(_selectedSlotIndex);
-                    }
+                    _deploymentCooldownManager.StartCooldown(_selectedSlotIndex);
                 }
             }
         }
@@ -277,7 +211,7 @@ public class CrosshairScript : MonoBehaviour
         if (_currentHoverIndicator != null)
         {
             _currentHoverIndicator.SetActive(true);
-            Vector3 position;
+            Vector3 position = tile.transform.position;
 
             if (isRetrieveMode)
             {
@@ -285,20 +219,10 @@ public class CrosshairScript : MonoBehaviour
                 if (Physics.Raycast(tile.transform.position, Vector3.down, out hit, 10f))
                 {
                     position = hit.collider.transform.position;
-                    position.y += _indicatorYOffset;
                 }
-                else
-                {
-                    position = tile.transform.position;
-                    position.y += _indicatorYOffset;
-                }
-            }
-            else
-            {
-                position = tile.transform.position;
-                position.y += _indicatorYOffset;
             }
 
+            position.y += _indicatorYOffset;
             _currentHoverIndicator.transform.position = position;
         }
     }
@@ -309,6 +233,35 @@ public class CrosshairScript : MonoBehaviour
         {
             _currentHoverIndicator.SetActive(false);
         }
+    }
+
+    void ClearHoverIndicator()
+    {
+        HideHoverIndicator();
+        if (_currentHoverIndicator != null)
+        {
+            Destroy(_currentHoverIndicator);
+            _currentHoverIndicator = null;
+        }
+    }
+
+    void UpdateHandDisplay(int selectedIndex)
+    {
+        if (_handDisplayManager != null)
+        {
+            _handDisplayManager.UpdateHandDisplay(selectedIndex);
+        }
+    }
+
+    void DeselectSlot()
+    {
+        _selectedSlotIndex = 5;
+        UpdateHandDisplay(5);
+    }
+
+    bool IsSlotReady(int slotIndex)
+    {
+        return _deploymentCooldownManager == null || _deploymentCooldownManager.IsSlotReadyForPlacement(slotIndex);
     }
 
     void OnDisable()
@@ -325,16 +278,13 @@ public class CrosshairScript : MonoBehaviour
 
         if (_isRetrieveMode)
         {
-            _selectedSlotIndex = 5;
             UpdateHandDisplay(5);
         }
-
-        HideHoverIndicator();
-
-        if (_currentHoverIndicator != null)
+        else
         {
-            Destroy(_currentHoverIndicator);
-            _currentHoverIndicator = null;
+            UpdateHandDisplay(_selectedSlotIndex);
         }
+
+        ClearHoverIndicator();
     }
 }
