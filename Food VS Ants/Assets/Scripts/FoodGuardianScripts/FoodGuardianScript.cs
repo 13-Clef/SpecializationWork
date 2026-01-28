@@ -228,6 +228,11 @@ public class FoodGuardianScript : MonoBehaviour
         }
     }
 
+    public void ResetAttackTimer()
+    {
+        _projectileSpawnTimer = _foodGuardianAttackRate;
+    }
+
     // getters
     public string GetGuardianName() => _guardianName;
     public Sprite GetElementIcon() => _elementIcon;

@@ -242,8 +242,8 @@ public class MovesetUIPanel : MonoBehaviour
         ColorBlock colors = button.colors;
         if (isSelected && isUnlocked)
         {
-            colors.normalColor = new Color(1f, 1f, 0.5f); // yellowish tint for selected
-            colors.highlightedColor = new Color(1f, 1f, 0.6f);
+            colors.normalColor = new Color(0.5f, 1f, 0.5f); // green tint for selected
+            colors.highlightedColor = new Color(0.6f, 1f, 0.6f); // lighter green on hover
         }
         else if (isUnlocked)
         {
@@ -256,6 +256,12 @@ public class MovesetUIPanel : MonoBehaviour
             colors.highlightedColor = new Color(0.5f, 0.5f, 0.5f);
         }
         button.colors = colors;
+
+        // force UI to refresh immediately
+        if (Application.isPlaying)
+        {
+            button.OnDeselect(null);
+        }
     }
 
     void UpdateEXPDisplay()

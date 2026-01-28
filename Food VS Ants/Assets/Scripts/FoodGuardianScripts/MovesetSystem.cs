@@ -98,9 +98,10 @@ public class MovesetSystem : MonoBehaviour
             _foodGuardianScript.SetAttackRate(_currentMoveset.attackRate);
             _foodGuardianScript.SetProjectilePrefab(_currentMoveset.projectilePrefab);
             _foodGuardianScript.SetBaseDamage(_currentMoveset.baseDamage);
-        }
 
-        Debug.Log($"[{gameObject.name}] Switched to moveset: {_currentMoveset.movesetName} ({_currentMoveset.elementType})");
+            // immediately switches to the selected moveset
+            _foodGuardianScript.ResetAttackTimer();
+        }
     }
 
     // check if a moveset is unlocked
