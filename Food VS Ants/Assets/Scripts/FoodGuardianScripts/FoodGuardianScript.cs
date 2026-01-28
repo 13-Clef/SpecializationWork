@@ -26,7 +26,9 @@ public class FoodGuardianScript : MonoBehaviour
     private HashSet<GameObject> _antsInRange = new HashSet<GameObject>();
 
     [Header("UI Display")]
+    [SerializeField] private string _guardianName = "Input Guardian's Name";
     [SerializeField] private Sprite _guardianIcon;
+    [SerializeField] private Sprite _elementIcon;
 
     // current stats
     private int _maxHealth;
@@ -226,13 +228,10 @@ public class FoodGuardianScript : MonoBehaviour
         }
     }
 
-    // guardian icon
-    public Sprite GetGuardianIcon()
-    {
-        return _guardianIcon;
-    }
-
     // getters
+    public string GetGuardianName() => _guardianName;
+    public Sprite GetElementIcon() => _elementIcon;
+    public Sprite GetGuardianIcon() => _guardianIcon;
     public int GetMaxHealth() => _maxHealth;
     public int GetCurrentHealth() => _currentHealth;
     public int GetDamage() => _damage;

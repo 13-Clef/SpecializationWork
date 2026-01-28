@@ -23,12 +23,12 @@ public class CrosshairScript : MonoBehaviour
     private GameObject _currentTargetTile;
     private bool _isRetrieveMode = false;
     private int _selectedSlotIndex = 0;
-    private LayerMask _antDetectionLayer;
+    private LayerMask _raycastLayerMask;
 
     void Start()
     {
         _mainCamera = Camera.main;
-        _antDetectionLayer = ~LayerMask.GetMask("AntDetection");
+        _raycastLayerMask = ~(LayerMask.GetMask("AntDetection") | LayerMask.GetMask("Player") | LayerMask.GetMask("Projectile"));
 
         UpdateHandDisplay(0);
     }
@@ -67,7 +67,7 @@ public class CrosshairScript : MonoBehaviour
             Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, _raycastDistance, _antDetectionLayer))
+            if (Physics.Raycast(ray, out hit, _raycastDistance, _raycastLayerMask))
             {
                 FoodGuardianScript guardianScript = hit.collider.GetComponentInParent<FoodGuardianScript>();
 
@@ -133,7 +133,7 @@ public class CrosshairScript : MonoBehaviour
         Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, _raycastDistance, _antDetectionLayer))
+        if (Physics.Raycast(ray, out hit, _raycastDistance, _raycastLayerMask))
         {
             if (hit.collider.CompareTag("PlaceableTile"))
             {
@@ -160,7 +160,7 @@ public class CrosshairScript : MonoBehaviour
         Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, _raycastDistance, _antDetectionLayer))
+        if (Physics.Raycast(ray, out hit, _raycastDistance, _raycastLayerMask))
         {
             FoodGuardianScript guardianScript = hit.collider.GetComponentInParent<FoodGuardianScript>();
 

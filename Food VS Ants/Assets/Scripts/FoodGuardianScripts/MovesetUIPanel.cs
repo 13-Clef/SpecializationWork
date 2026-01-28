@@ -8,6 +8,11 @@ public class MovesetUIPanel : MonoBehaviour
     [Header("Panel References")]
     [SerializeField] private GameObject _panelObject;
 
+    [Header("Guardian Info Display")]
+    [SerializeField] private TextMeshProUGUI _guardianNameText;
+    [SerializeField] private TextMeshProUGUI _elementText;
+    [SerializeField] private Image _elementIconImage;
+
     [Header("Stat Display")]
     [SerializeField] private TextMeshProUGUI _damageText;
     [SerializeField] private TextMeshProUGUI _attackRateText;
@@ -112,10 +117,9 @@ public class MovesetUIPanel : MonoBehaviour
         // selection highlight
         CreateSelectionHighlight(foodGuardian);
 
-        // update guardian icon if available
-        UpdateGuardianIcon();
-
         // update all displays
+        UpdateGuardianInfo();
+        UpdateGuardianIcon();
         UpdateStatsDisplay();
         UpdateMovesetButtons();
         UpdateHPDisplay();
@@ -166,14 +170,14 @@ public class MovesetUIPanel : MonoBehaviour
         if (_damageText != null)
         {
             int damage = _currentGuardian.GetDamage();
-            _damageText.text = $"{damage} DMG";
+            _damageText.text = $"{damage}";
         }
 
         // update attack rate
         if (_attackRateText != null)
         {
             float attackRate = _currentGuardian._foodGuardianAttackRate;
-            _attackRateText.text = $"{attackRate:F1} Sec";
+            _attackRateText.text = $"{attackRate:F1}/s";
         }
 
         // update level
@@ -360,9 +364,6 @@ public class MovesetUIPanel : MonoBehaviour
 
             // parent it to the guardian so it follows
             _currentHighlight.transform.SetParent(guardian.transform);
-
-            //// keep the world scale (don't inherit guardian's scale)
-            //_currentHighlight.transform.localScale = Vector3.one;
         }
     }
 
@@ -405,5 +406,62 @@ public class MovesetUIPanel : MonoBehaviour
         return EventSystem.current.IsPointerOverGameObject();
     }
 
+    void UpdateGuardianInfo()
+    {
+        if (_currentGuardian == null || _currentMovesetSystem == null)
+        {
+            return;
+        }
 
+        // update guardian's name
+        if (_guardianNameText != null)
+        {
+            string guardianName = _currentGuardian.GetGuardianName();
+            _guardianNameText.text = guardianName;
+        }
+
+        // update element Text and Icon
+        ElementType element = _currentMovesetSystem.GetGuardianElement();
+
+        if (_elementText != null)
+        {
+            _elementText.text = element.ToString();
+            _elementText.color = GetElementColor(element);
+        }
+
+        // update element icon
+        if (_elementIconImage != null)
+        {
+            Sprite elementIcon = _currentGuardian.GetElementIcon();
+
+            if (elementIcon != null)
+            {
+                _elementIconImage.sprite = elementIcon;
+                _elementIconImage.enabled = true;
+            }
+        }
+        else
+        {
+            _elementIconImage.enabled = false;
+        }
+    }
+
+    Color GetElementColor(ElementType element)
+    {
+        switch (element)
+        {
+            case ElementType.Fire:
+                return new Color(1f, 0.3f, 0.3f); // Red
+            case ElementType.Water:
+                return new Color(0.3f, 0.5f, 1f); // Blue
+            case ElementType.Electric:
+                return new Color(1f, 1f, 0.3f); // Yellow
+            case ElementType.Earth:
+                return new Color(0.6f, 0.4f, 0.2f); // Brown
+            case ElementType.Grass:
+                return new Color(0.3f, 1f, 0.3f); // Green
+            default:
+                return Color.white;
+        }
+    }
 }

@@ -45,7 +45,7 @@ public class HealthBar : MonoBehaviour
 
         if (_healthText != null)
         {
-            _healthText.text = $"HP: {_currentHealth}/{_maxHealth}";
+            _healthText.text = $"{_currentHealth}/{_maxHealth}";
         }
     }
 }
