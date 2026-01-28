@@ -14,6 +14,9 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float _lookSensitivity = 1f;
     [SerializeField] private float _maxLookAngle = 80f;
 
+    [Header("UI References")]
+    [SerializeField] private MovesetUIPanel _movesetUIPanel;
+
     private CharacterController _characterController;
     private InputAction _moveAction;
     private InputAction _lookAction;
@@ -32,32 +35,14 @@ public class PlayerScript : MonoBehaviour
         _foodGuardianLayer = ~LayerMask.GetMask("FoodGuardian");
 
         // lock and hide cursor when game starts
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        LockCursor();
     }
 
     // Update is called once per frame
     void Update()
     {
         HandleMovement();
-
-        if (Input.GetKey(KeyCode.LeftAlt))
-        {
-            // unlock and show cursor
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            // lock and hide cursor
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            // only handle look when LeftAlt is NOT pressed
-            HandleLook();
-        }
-
-
+        HandleCursorState();
     }
 
     void HandleMovement()
@@ -74,6 +59,23 @@ public class PlayerScript : MonoBehaviour
         _characterController.Move(Vector3.down * 9.81f * Time.deltaTime);
     }
 
+    void HandleCursorState()
+    {
+        // check if moveset panel is open
+        bool isPanelOpen = _movesetUIPanel != null && _movesetUIPanel.IsPanelOpen();
+
+        // if panel is open OR holding LeftAlt, unlock cursor
+        if (isPanelOpen || Input.GetKey(KeyCode.LeftAlt))
+        {
+            UnlockCursor();
+        }
+        else
+        {
+            // lock cursor and handle look
+            LockCursor();
+            HandleLook();
+        }
+    }
     void HandleLook()
     {
         _lookInput = _lookAction.ReadValue<Vector2>();
@@ -89,5 +91,17 @@ public class PlayerScript : MonoBehaviour
         {
             _cameraTarget.localEulerAngles = new Vector3(_cameraPitch, 0f, 0f);
         }
+    }
+
+    void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }

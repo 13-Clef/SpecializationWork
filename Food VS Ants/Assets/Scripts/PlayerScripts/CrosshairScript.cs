@@ -29,6 +29,7 @@ public class CrosshairScript : MonoBehaviour
     {
         _mainCamera = Camera.main;
         _antDetectionLayer = ~LayerMask.GetMask("AntDetection");
+
         UpdateHandDisplay(0);
     }
 

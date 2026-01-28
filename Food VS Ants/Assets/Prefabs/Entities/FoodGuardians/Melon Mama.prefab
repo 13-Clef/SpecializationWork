@@ -1005,19 +1005,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _guardianElement: 5
   _basicNormal:
-    movesetName: Basic Attack
+    movesetName: Seed Shot
     elementType: 0
     unlockLevel: 1
     projectilePrefab: {fileID: 5959366710827295710, guid: 9c8b2418c52377149a6a7b0cb916fbd8, type: 3}
     attackRate: 1
     baseDamage: 10
   _basicElement:
-    movesetName: Grass Attack
+    movesetName: Juice Splash
     elementType: 5
     unlockLevel: 1
     projectilePrefab: {fileID: 5959366710827295710, guid: 64aa5c4669e49ea40b765712f89ecc2f, type: 3}
     attackRate: 1
-    baseDamage: 10
+    baseDamage: 20
   _advancedNormal:
     movesetName: Advanced Attack
     elementType: 0
