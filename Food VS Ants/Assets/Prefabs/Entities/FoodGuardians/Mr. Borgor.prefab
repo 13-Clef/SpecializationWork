@@ -2633,10 +2633,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _guardianElement: 1
   _basicNormal:
-    movesetName: Basic Attack
+    movesetName: Burger Throw
     elementType: 0
     unlockLevel: 1
-    projectilePrefab: {fileID: 5959366710827295710, guid: 9c8b2418c52377149a6a7b0cb916fbd8, type: 3}
+    projectilePrefab: {fileID: 3079824582360814655, guid: 2473bf9bb03329f4da19abb1097f20aa, type: 3}
     attackRate: 1
     baseDamage: 10
   _basicElement:
@@ -2647,19 +2647,19 @@ MonoBehaviour:
     attackRate: 1
     baseDamage: 20
   _advancedNormal:
-    movesetName: Advanced Attack
-    elementType: 0
+    movesetName: Grease Inferno
+    elementType: 1
     unlockLevel: 3
-    projectilePrefab: {fileID: 5959366710827295710, guid: 9c8b2418c52377149a6a7b0cb916fbd8, type: 3}
+    projectilePrefab: {fileID: 3079824582360814655, guid: 2473bf9bb03329f4da19abb1097f20aa, type: 3}
     attackRate: 1
-    baseDamage: 20
+    baseDamage: 25
   _advancedElement:
-    movesetName: Advanced Element
+    movesetName: Frystorm Missiles
     elementType: 1
     unlockLevel: 5
     projectilePrefab: {fileID: 6901670160653438195, guid: 14eac531d054c7d439224cbbf81cb4cd, type: 3}
     attackRate: 1
-    baseDamage: 30
+    baseDamage: 15
   _currentMovesetIndex: 0
 --- !u!114 &4452756487236000136
 MonoBehaviour:

@@ -1558,19 +1558,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _guardianElement: 4
   _basicNormal:
-    movesetName: Basic Attack
+    movesetName: Sandwich Slam
     elementType: 0
     unlockLevel: 1
     projectilePrefab: {fileID: 5959366710827295710, guid: 9c8b2418c52377149a6a7b0cb916fbd8, type: 3}
     attackRate: 1
     baseDamage: 10
   _basicElement:
-    movesetName: Earth Attack
+    movesetName: Crust Toss
     elementType: 4
     unlockLevel: 1
-    projectilePrefab: {fileID: 5959366710827295710, guid: 13b9ee02440b9664b83e61ecc5a7a228, type: 3}
+    projectilePrefab: {fileID: 8782284292502545097, guid: 0da0c45e75e630244af2dc9fb5b79cd5, type: 3}
     attackRate: 1
-    baseDamage: 10
+    baseDamage: 20
   _advancedNormal:
     movesetName: Advanced Normal
     elementType: 0
@@ -1579,12 +1579,12 @@ MonoBehaviour:
     attackRate: 1
     baseDamage: 10
   _advancedElement:
-    movesetName: Advanced Earth
+    movesetName: Lunchquake
     elementType: 4
     unlockLevel: 5
     projectilePrefab: {fileID: 5959366710827295710, guid: 13b9ee02440b9664b83e61ecc5a7a228, type: 3}
     attackRate: 1
-    baseDamage: 10
+    baseDamage: 25
   _currentMovesetIndex: 0
 --- !u!114 &1985237515564915511
 MonoBehaviour:
