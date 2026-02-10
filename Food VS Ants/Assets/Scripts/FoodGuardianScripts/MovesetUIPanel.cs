@@ -38,6 +38,20 @@ public class MovesetUIPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _advancedNormalText;
     [SerializeField] private TextMeshProUGUI _advancedElementText;
 
+    [Header("Moveset Button Icons")]
+    [SerializeField] private Image _basicNormalIcon;
+    [SerializeField] private Image _basicElementIcon;
+    [SerializeField] private Image _advancedNormalIcon;
+    [SerializeField] private Image _advancedElementIcon;
+
+    [Header("Element Type Icons")]
+    [SerializeField] private Sprite _normalIcon;   // for ElementType.None (Normal)
+    [SerializeField] private Sprite _fireIcon;
+    [SerializeField] private Sprite _waterIcon;
+    [SerializeField] private Sprite _electricIcon;
+    [SerializeField] private Sprite _earthIcon;
+    [SerializeField] private Sprite _grassIcon;
+
     [Header("Lock Overlays (For Advanceds)")]
     [SerializeField] private GameObject _advancedNormalLock;
     [SerializeField] private GameObject _advancedElementLock;
@@ -199,10 +213,10 @@ public class MovesetUIPanel : MonoBehaviour
         Moveset[] allMovesets = _currentMovesetSystem.GetAllMovesets();
 
         // update each button
-        UpdateButton(_basicNormalButton, _basicNormalText, 0, currentMovesetIndex, allMovesets);
-        UpdateButton(_basicElementButton, _basicElementText, 1, currentMovesetIndex, allMovesets);
-        UpdateButton(_advancedNormalButton, _advancedNormalText, 2, currentMovesetIndex, allMovesets);
-        UpdateButton(_advancedElementButton, _advancedElementText, 3, currentMovesetIndex, allMovesets);
+        UpdateButton(_basicNormalButton, _basicNormalText, _basicNormalIcon, 0, currentMovesetIndex, allMovesets);
+        UpdateButton(_basicElementButton, _basicElementText, _basicElementIcon, 1, currentMovesetIndex, allMovesets);
+        UpdateButton(_advancedNormalButton, _advancedNormalText, _advancedNormalIcon, 2, currentMovesetIndex, allMovesets);
+        UpdateButton(_advancedElementButton, _advancedElementText, _advancedElementIcon, 3, currentMovesetIndex, allMovesets);
 
         // update lock overlays
         if (_advancedNormalLock != null)
@@ -218,32 +232,36 @@ public class MovesetUIPanel : MonoBehaviour
         }
     }
 
-    void UpdateButton(Button button, TextMeshProUGUI buttonText, int movesetIndex, int currentIndex, Moveset[] movesets)
+    void UpdateButton(Button button, TextMeshProUGUI buttonText, Image iconImage,
+                   int movesetIndex, int currentIndex, Moveset[] movesets)
     {
-        if (button == null)
-        {
-            return;
-        }
+        if (button == null) return;
 
         bool isUnlocked = _currentMovesetSystem.IsMovesetUnlocked(movesetIndex);
         bool isSelected = currentIndex == movesetIndex;
 
-        // set interactable state
         button.interactable = isUnlocked;
 
-        // update button text
+        // text
         if (buttonText != null && movesets[movesetIndex] != null)
+            buttonText.text = movesets[movesetIndex].movesetName;
+
+        // icon (AUTO based on moveset typing)
+        if (iconImage != null && movesets[movesetIndex] != null)
         {
-            string movesetName = movesets[movesetIndex].movesetName;
-            buttonText.text = movesetName;
+            Sprite icon = GetTypeIcon(movesets[movesetIndex].elementType);
+            iconImage.sprite = icon;
+
+            // gray out if locked
+            iconImage.color = isUnlocked ? Color.white : new Color(0.5f, 0.5f, 0.5f);
         }
 
-        // visual feedback for selected button
+        // selected tint
         ColorBlock colors = button.colors;
         if (isSelected && isUnlocked)
         {
-            colors.normalColor = new Color(0.5f, 1f, 0.5f); // green tint for selected
-            colors.highlightedColor = new Color(0.6f, 1f, 0.6f); // lighter green on hover
+            colors.normalColor = new Color(0.5f, 1f, 0.5f);
+            colors.highlightedColor = new Color(0.6f, 1f, 0.6f);
         }
         else if (isUnlocked)
         {
@@ -252,17 +270,15 @@ public class MovesetUIPanel : MonoBehaviour
         }
         else
         {
-            colors.normalColor = new Color(0.5f, 0.5f, 0.5f); // gray for locked
+            colors.normalColor = new Color(0.5f, 0.5f, 0.5f);
             colors.highlightedColor = new Color(0.5f, 0.5f, 0.5f);
         }
         button.colors = colors;
 
-        // force UI to refresh immediately
         if (Application.isPlaying)
-        {
             button.OnDeselect(null);
-        }
     }
+
 
     void UpdateEXPDisplay()
     {
@@ -427,7 +443,7 @@ public class MovesetUIPanel : MonoBehaviour
         }
 
         // update element Text and Icon
-        ElementType element = _currentMovesetSystem.GetGuardianElement();
+        ElementType element = _currentMovesetSystem.GetCurrentElement();
 
         if (_elementText != null)
         {
@@ -468,6 +484,19 @@ public class MovesetUIPanel : MonoBehaviour
                 return new Color(0.3f, 1f, 0.3f); // Green
             default:
                 return Color.white;
+        }
+    }
+
+    private Sprite GetTypeIcon(ElementType element)
+    {
+        switch (element)
+        {
+            case ElementType.Fire: return _fireIcon;
+            case ElementType.Water: return _waterIcon;
+            case ElementType.Electric: return _electricIcon;
+            case ElementType.Earth: return _earthIcon;
+            case ElementType.Grass: return _grassIcon;
+            default: return _normalIcon; // ElementType.None
         }
     }
 }

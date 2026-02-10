@@ -37,7 +37,8 @@ public class FoodGuardianLevelingSystem : MonoBehaviour
         _movesetSystem = GetComponent<MovesetSystem>();
 
         // store base stats
-        _baseMaxHealth = _foodGuardianScript.GetMaxHealth();
+        if (_foodGuardianScript != null)
+            _baseMaxHealth = _foodGuardianScript.GetMaxHealth();
 
         // calculate EXP needed for next level
         _expRequiredForNextLevel = CalculateEXPForLevel(_currentLevel + 1);

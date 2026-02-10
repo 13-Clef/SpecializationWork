@@ -1,14 +1,21 @@
 using UnityEngine;
 
-public class ProjectileScript : MonoBehaviour
+public class ProjectileScript : MonoBehaviour, IAttackInit
 {
     [SerializeField] private float _speed = 10f;
     [SerializeField] private float _maxLifetime = 5f;
-    [SerializeField] private GameObject _damageNumberPrefab; 
+    [SerializeField] private GameObject _damageNumberPrefab;
 
     private int _damage = 10; // default 10 if no moveset set
     private GameObject _shooter;
     private float _lifetimeTimer = 0f;
+
+    // Implement IAttackInit interface
+    public void Init(AttackContext ctx)
+    {
+        _shooter = ctx.shooter;
+        _damage = ctx.baseDamage;
+    }
 
     void Update()
     {
@@ -30,6 +37,9 @@ public class ProjectileScript : MonoBehaviour
         {
             // calculate final damage with multiplier
             int finalDamage = CalculateDamage(ant);
+
+            MovesetSystem ms = _shooter != null ? _shooter.GetComponent<MovesetSystem>() : null;
+            Debug.Log($"Shooter={_shooter?.name}, AntElement={ant.GetElement()}, Mult={ms?.GetDamageMultiplier(ant.GetElement())}");
 
             // deal damage
             ant.TakeDamage(finalDamage, _shooter);
@@ -56,30 +66,28 @@ public class ProjectileScript : MonoBehaviour
                 // get the ant's element
                 ElementType antElement = target.GetElement();
 
-                // get the damage multiplier (1.5x for super effective, 0.5x for not effective, 1.0x for normal effective)
+                // get the damage multiplier
                 float multiplier = movesetSystem.GetDamageMultiplier(antElement);
 
                 // apply multiplier
                 finalDamage = Mathf.RoundToInt(_damage * multiplier);
             }
         }
+
         return finalDamage;
     }
 
     private void ShowDamageNumber(Vector3 position, int damage, AntHealth target)
     {
         if (_damageNumberPrefab == null)
-        {
             return;
-        }
 
         Vector3 spawnPos = position + Vector3.up * 2f;
         GameObject damageObj = Instantiate(_damageNumberPrefab, spawnPos, Quaternion.identity);
-        DamageNumber damageNumber = damageObj.GetComponent<DamageNumber>();
 
+        DamageNumber damageNumber = damageObj.GetComponent<DamageNumber>();
         if (damageNumber != null)
         {
-            // determine effectiveness colour
             Color damageColor = GetEffectivenessColor(target);
             damageNumber.Setup(damage, damageColor);
         }
@@ -88,37 +96,20 @@ public class ProjectileScript : MonoBehaviour
     private Color GetEffectivenessColor(AntHealth target)
     {
         if (_shooter == null)
-        {
-            return Color.white; // normal damage 1x
-        }
+            return Color.white;
 
         MovesetSystem movesetSystem = _shooter.GetComponent<MovesetSystem>();
         if (movesetSystem == null)
-        {
-            return Color.white; // normal damage 1x
-        }
+            return Color.white;
 
         ElementType antElement = target.GetElement();
         float multiplier = movesetSystem.GetDamageMultiplier(antElement);
 
         if (multiplier > 1.0f)
-        {
-            return new Color(0f, 1f, 0.3f); // Green for super effective 1.5x
-        }
+            return new Color(0f, 1f, 0.3f); // Green for super effective
         else if (multiplier < 1.0f)
-        {
-            return new Color(1f, 0.5f, 0.5f); // Pink for not very effective 0.5x
-        }
+            return new Color(1f, 0.5f, 0.5f); // Pink for not very effective
 
-        return Color.white; // Normal damage 1x
-    }
-    public void SetDamage(int damage)
-    {
-        _damage = damage;
-    }
-
-    public void SetShooter(GameObject shooter)
-    {
-        _shooter = shooter;
+        return Color.white; // Normal damage
     }
 }
