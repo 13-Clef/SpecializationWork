@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.ProBuilder;
 
 public class FoodGuardianScript : MonoBehaviour
 {
@@ -64,32 +65,29 @@ public class FoodGuardianScript : MonoBehaviour
     // food guardian attacking
     void FoodGuardianAttacksAnt()
     {
-        // check if projectile prefab and firepoint is assigned
         if (_projectilePrefab == null || _firePoint == null)
         {
             Debug.LogError("projectile prefab or fire point is not assigned");
             return;
         }
 
-        // timer for projectile
         _projectileSpawnTimer += Time.deltaTime;
 
         if (_projectileSpawnTimer > _foodGuardianAttackRate)
         {
-            // spawn projectile from firepoint
+            // spawn projectile
             GameObject projectile = Instantiate(_projectilePrefab, _firePoint.position, _firePoint.rotation);
 
-            // pass damage and shooter info to projectile
+            // NORMAL projectile (hit damage)
             ProjectileScript projScript = projectile.GetComponent<ProjectileScript>();
             if (projScript != null)
             {
                 projScript.SetDamage(_damage);
                 projScript.SetShooter(gameObject);
             }
-
-            _projectileSpawnTimer = 0;
         }
     }
+
 
     // take damage from ants
     public void TakeDamage(int damage)

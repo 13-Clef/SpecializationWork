@@ -2532,7 +2532,6 @@ GameObject:
   - component: {fileID: 336868856020263941}
   - component: {fileID: 4452756487236000136}
   - component: {fileID: 8940645715522974939}
-  - component: {fileID: 79396174041414335}
   m_Layer: 8
   m_Name: Mr. Borgor
   m_TagString: FoodGuardian
@@ -2697,8 +2696,8 @@ MonoBehaviour:
   _advancedNormal:
     movesetName: Grease Inferno
     elementType: 1
-    unlockLevel: 3
-    projectilePrefab: {fileID: 3079824582360814655, guid: 2473bf9bb03329f4da19abb1097f20aa, type: 3}
+    unlockLevel: 1
+    projectilePrefab: {fileID: 6901670160653438195, guid: bd910fd4ceb849945832f3a4ed7bbd54, type: 3}
     attackRate: 1
     baseDamage: 25
   _advancedElement:
@@ -2743,25 +2742,6 @@ MonoBehaviour:
   bakeValues: []
   outlineMaskMaterialPrefab: {fileID: 2100000, guid: 106f3ff43a17d4967a2b64c7a92e49ec, type: 2}
   outlineFillMaterialPrefab: {fileID: 2100000, guid: 311313efa011949e98b6761d652ad13c, type: 2}
---- !u!114 &79396174041414335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7078886136696515481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf7e325327eebf24d9f67d9ac3b6acfd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  firePoint: {fileID: 4358009316037139027}
-  infernoPrefab: {fileID: 0}
-  maxRangeWorld: 3
-  boundaryMask:
-    serializedVersion: 2
-    m_Bits: 0
-  yLift: 0.2
 --- !u!1 &7783243761663261580
 GameObject:
   m_ObjectHideFlags: 0
