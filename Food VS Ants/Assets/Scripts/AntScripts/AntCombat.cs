@@ -15,7 +15,7 @@ public class AntCombat : MonoBehaviour
 
     void Awake()
     {
-        if (_animator != null)
+        if (_animator == null)
         {
             _animator = GetComponent<Animator>();
         }

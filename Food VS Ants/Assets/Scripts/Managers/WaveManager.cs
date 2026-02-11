@@ -4,22 +4,17 @@ using UnityEngine.UI;
 
 public class WaveManager : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private AntSpawner _antSpawner;
+
     [Header("Wave Settings")]
     [SerializeField] private int _currentWave = 0;
     [SerializeField] private int _maxWaves = 10;
-    [SerializeField] private float _timeBetweenWaves = 10f;
-
-    [Header("Spawn Settings")]
-    [SerializeField] private GameObject[] _antPrefabs;
-    [SerializeField] private Transform[] _spawnPoints;
-
-    [Header("Ant Type Distribution")]
-    [SerializeField] private bool _useCustomDistribution = false;
-    [SerializeField] private float[] _antTypeWeights;
 
     [Header("Wave Scaling")]
     [SerializeField] private int _baseAntsPerWave = 10;
     [SerializeField] private float _antIncreasePerWave = 5f;
+
     [SerializeField] private float _baseSpawnInterval = 2f;
     [SerializeField] private float _spawnIntervalDecreasePerWave = 0.1f;
     [SerializeField] private float _minSpawnInterval = 0.5f;
@@ -28,17 +23,21 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _waveText;
     [SerializeField] private TextMeshProUGUI _enemiesRemainingText;
     [SerializeField] private Button _startWaveButton;
-    [SerializeField] private GameObject _waveCompletePanel; // optional?
+    [SerializeField] private GameObject _waveCompletePanel;
 
     // wave state
     private bool _waveActive = false;
     private bool _isSpawning = false;
+
+    // counters
     private int _antsToSpawn = 0;
     private int _antsSpawned = 0;
     private int _antsAlive = 0;
+    private int _totalAntsThisWave = 0;
+
+    // spawn timing
     private float _currentSpawnInterval;
     private float _spawnTimer = 0f;
-    private float _waveBreakTimer = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -61,7 +60,7 @@ public class WaveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if wave is active and we are spawning
+        // spawn loop (WaveManager controls WHEN to call spawner)
         if (_waveActive && _isSpawning)
         {
             SpawnAnts();
@@ -78,6 +77,7 @@ public class WaveManager : MonoBehaviour
     {
         if (_waveActive) return;
 
+        // move on to next wave
         _currentWave++;
 
         if (_currentWave >= _maxWaves)
@@ -90,7 +90,9 @@ public class WaveManager : MonoBehaviour
 
         // calculate wave difficulty
         _antsToSpawn = Mathf.RoundToInt(_baseAntsPerWave + (_antIncreasePerWave * (_currentWave - 1)));
+        _totalAntsThisWave = _antsToSpawn; // store total for UI
         _currentSpawnInterval = Mathf.Max(_minSpawnInterval, _baseSpawnInterval - (_spawnIntervalDecreasePerWave * (_currentWave - 1)));
+
 
         // reset ant counters
         _antsSpawned = 0;
@@ -129,81 +131,33 @@ public class WaveManager : MonoBehaviour
 
         if (_spawnTimer >= _currentSpawnInterval)
         {
-            SpawnAnt();
+            SpawnOneAnt();
             _spawnTimer = 0f;
         }
     }
 
-    void SpawnAnt()
+    void SpawnOneAnt()
     {
-        if (_antPrefabs == null || _antPrefabs.Length == 0 || _spawnPoints.Length == 0)
-        {
-            return;
-        }
+        // AntSpawner decides: which ant type (weighted) + which lane (random)
+        GameObject ant = _antSpawner.SpawnAntAndReturn();
 
-        // choose random lane (0-4)
-        int randomLane = Random.Range(0, _spawnPoints.Length);
-        Transform spawnPoint = _spawnPoints[randomLane];
+        // If spawner failed (no pool/spawnpoints), do nothing
+        if (ant == null) return;
 
-        // choose ant type (random or/and weighted)
-        GameObject antPrefab = ChooseAntType();
-
-        // spawn ant at that position
-        GameObject ant = Instantiate(antPrefab, spawnPoint.position, spawnPoint.rotation);
-
-        // track spawned ants
+        // Counters
         _antsSpawned++;
         _antsAlive++;
 
-        // add tracker component
-        ant.AddComponent<WaveAntTracker>().Initialize(this);
+        // Track when this ant dies (OnDestroy)
+        WaveAntTracker tracker = ant.AddComponent<WaveAntTracker>();
+        tracker.Initialize(this);
 
         UpdateWaveUI();
     }
 
-    GameObject ChooseAntType()
-    {
-        // if using custom distribution with weights
-        if (_useCustomDistribution && _antTypeWeights != null && _antTypeWeights.Length == _antPrefabs.Length)
-        {
-            return GetWeightedRandomAnt();
-        }
-        else
-        {
-            // simple random selection
-            int randomIndex = Random.Range(0, _antPrefabs.Length);
-            return _antPrefabs[randomIndex];
-        }
-    }
-
-    // weighted random selection (e.g. 70% normal, 20% fast, 10% tank)
-    GameObject GetWeightedRandomAnt()
-    {
-        float totalWeight = 0f;
-        foreach (float weight in _antTypeWeights)
-        {
-            totalWeight += weight;
-        }
-
-        float randomValue = Random.Range(0f, totalWeight);
-        float cumulativeWeight = 0f;
-
-        for (int i = 0; i < _antPrefabs.Length; i++)
-        {
-            cumulativeWeight += _antTypeWeights[i];
-            if (randomValue <= cumulativeWeight)
-            {
-                return _antPrefabs[i];
-            }
-        }
-
-        // fallback (should never reach here)
-        return _antPrefabs[0];
-    }
-
     public void OnAntDied()
     {
-        _antsAlive--;
+        _antsAlive = Mathf.Max(0, _antsAlive - 1);
         UpdateWaveUI();
     }
 
@@ -230,30 +184,35 @@ public class WaveManager : MonoBehaviour
     {
         Debug.Log("All waves complete! You win!");
 
-        // TODO: Show victory screen
         if (_waveText != null)
-        {
             _waveText.text = "VICTORY!";
-        }
+
+        if (_enemiesRemainingText != null)
+            _enemiesRemainingText.text = "";
 
         if (_startWaveButton != null)
-        {
             _startWaveButton.gameObject.SetActive(false);
-        }
+
+        if (_waveCompletePanel != null)
+            _waveCompletePanel.SetActive(false);
     }
 
     void UpdateWaveUI()
     {
         if (_waveText != null)
         {
-            _waveText.text = $"Wave {_currentWave}/{_maxWaves}";
+            _waveText.text = $"Wave {_currentWave}";
         }
 
         if (_enemiesRemainingText != null)
         {
             if (_waveActive)
             {
-                _enemiesRemainingText.text = $"Enemies: {_antsAlive}/{_antsToSpawn}";
+                int remaining = _totalAntsThisWave - (_antsSpawned - _antsAlive);
+                remaining = Mathf.Clamp(remaining, 0, _totalAntsThisWave);
+
+                _enemiesRemainingText.text =
+                    $"Ant: {remaining}/{_totalAntsThisWave}";
             }
             else
             {
@@ -261,13 +220,15 @@ public class WaveManager : MonoBehaviour
             }
         }
     }
+
+
     // Public getters
     public int GetCurrentWave() => _currentWave;
     public int GetAntsAlive() => _antsAlive;
     public bool IsWaveActive() => _waveActive;
 }
 
-// Helper component to track when ants die
+// Tracks ant death by detecting when the ant GameObject is destroyed
 public class WaveAntTracker : MonoBehaviour
 {
     private WaveManager _waveManager;
@@ -277,11 +238,9 @@ public class WaveAntTracker : MonoBehaviour
         _waveManager = manager;
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         if (_waveManager != null)
-        {
             _waveManager.OnAntDied();
-        }
     }
 }

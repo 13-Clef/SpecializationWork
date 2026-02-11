@@ -2743,10 +2743,10 @@ MonoBehaviour:
   _advancedElement:
     movesetName: Frystorm Missiles
     elementType: 1
-    unlockLevel: 5
-    projectilePrefab: {fileID: 6901670160653438195, guid: 14eac531d054c7d439224cbbf81cb4cd, type: 3}
-    attackRate: 1
-    baseDamage: 15
+    unlockLevel: 1
+    projectilePrefab: {fileID: 5086037241500760767, guid: 2506ced9b61f1024d92aa134a54be1e7, type: 3}
+    attackRate: 2.5
+    baseDamage: 25
   _currentMovesetIndex: 0
 --- !u!114 &1131802773998608430
 MonoBehaviour:

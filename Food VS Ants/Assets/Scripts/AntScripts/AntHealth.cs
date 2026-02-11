@@ -158,4 +158,24 @@ public class AntHealth : MonoBehaviour
         }
         return ElementType.None;
     }
+
+    public void MultiplyHealth(float mult)
+    {
+        // safety clamp (prevents 0 HP bugs)
+        mult = Mathf.Max(0.1f, mult);
+
+        _maxHealth = Mathf.RoundToInt(_maxHealth * mult);
+        _currentHealth = Mathf.RoundToInt(_currentHealth * mult);
+
+        // keep current health valid
+        _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
+
+        // update health bar instantly (important for tanks/runners)
+        if (_healthBar != null)
+        {
+            _healthBar.SetMaxHealth(_maxHealth);
+            _healthBar.SetCurrentHealth(_currentHealth);
+        }
+    }
+
 }

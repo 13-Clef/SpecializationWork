@@ -50,7 +50,7 @@ public class FoodGuardianScript : MonoBehaviour
         if (_canFoodGuardianAttack)
             FoodGuardianAttacksAnt();
         else
-            _projectileSpawnTimer = 0f; // optional: stop charging when no ants
+            _projectileSpawnTimer = 0f; // stop charging when no ants
     }
 
     void FoodGuardianAttacksAnt()
@@ -65,7 +65,7 @@ public class FoodGuardianScript : MonoBehaviour
             GameObject spawned = Instantiate(_projectilePrefab, _firePoint.position, _firePoint.rotation);
 
             // One unified init path for ALL attack types
-            var init = spawned.GetComponent<MonoBehaviour>() as IAttackInit;
+            IAttackInit init = spawned.GetComponent<IAttackInit>();
             if (init != null)
             {
                 AttackContext ctx = new AttackContext

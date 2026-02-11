@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7204238771024621977}
   - component: {fileID: 4867777424951348761}
   - component: {fileID: 6062650351728021327}
-  - component: {fileID: 316103965857888036}
+  - component: {fileID: 2326418747671950708}
   m_Layer: 9
   m_Name: JuiceSplash
   m_TagString: Untagged
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 5959366710827295710}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 1.18}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -135,7 +135,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 118
   m_CollisionDetection: 0
---- !u!114 &316103965857888036
+--- !u!114 &2326418747671950708
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,12 +144,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 5959366710827295710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f668f1d4ab858894b81b347494191205, type: 3}
+  m_Script: {fileID: 11500000, guid: 03313f6e356cad742aa6ecd1c52071bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
-  _maxLifetime: 5
-  _damageNumberPrefab: {fileID: 7655466161291200840, guid: f827125f5bb8c314e9b895085e6fbcb3, type: 3}
+  speed: 12
+  lifetime: 4
+  destroyOnAnyHit: 0
+  splashRadius: 6.5
+  splashMultiplier: 0.5
+  antMask:
+    serializedVersion: 2
+    m_Bits: 128
+  juiceSplashVfxPrefab: {fileID: 5959366710827295710, guid: 834858d23cb6feb4ab3da5f9f6fb2e43, type: 3}
+  vfxLifetime: 2
+  damageNumberPrefab: {fileID: 7655466161291200840, guid: f827125f5bb8c314e9b895085e6fbcb3, type: 3}
+  damageNumberOffset: {x: 0, y: 2, z: 0}
 --- !u!1001 &1430492180893786629
 PrefabInstance:
   m_ObjectHideFlags: 0

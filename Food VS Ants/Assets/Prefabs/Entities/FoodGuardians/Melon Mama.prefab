@@ -953,7 +953,7 @@ MonoBehaviour:
     movesetName: Seed Shot
     elementType: 0
     unlockLevel: 1
-    projectilePrefab: {fileID: 5959366710827295710, guid: 9c8b2418c52377149a6a7b0cb916fbd8, type: 3}
+    projectilePrefab: {fileID: 5070436816012176680, guid: 49ff9cd10b2d48545a5f6f9f78bfc974, type: 3}
     attackRate: 1
     baseDamage: 10
   _basicElement:

@@ -54,4 +54,10 @@ public class AntMovement : MonoBehaviour
         _movementSpeed = 0f;
         StopMoving();
     }
+
+    public void MultiplySpeed(float mult)
+    {
+        mult = Mathf.Max(0.1f, mult);
+        _movementSpeed *= mult;
+    }
 }
